@@ -1,0 +1,9 @@
+{
+  "name": "Parmyay",
+  "version": "1.0.0",
+  "description": "A website dedicated to finding and rating the best chicken parmigianas in your local area",
+  "main": "index.js",
+  "repository": "https://github.com/MrCeleryman/Parmyay.git",
+  "author": "MrCeleryman",
+  "license": "MIT"
+}
