@@ -1,27 +1,32 @@
 <template>
-  <div id="main">
-    <side-nav></side-nav>
-    <winner-is-you></winner-is-you>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <site-header v-on:changeLang="changeLang"></site-header>
+    <site-intro :LANG="LANG" ></site-intro>
   </div>
 </template>
 <style scoped>
     #main {
-        height: 100%;
+        position: relative;
     }
 </style>
 <script lang="ts">
-    import {
-        Vue,
-        Component
-    } from 'av-ts'
-    import SideNav from './components/SideNav'
-    import WinnerIsYou from './components/WinnerIsYou'
+    import {Vue, Component} from 'av-ts'
+    import SiteHeader from './components/SiteHeader'
+    import SiteIntro from './components/SiteIntro'
 
     @Component({
         components: {
-            SideNav,
-            WinnerIsYou
+            SiteHeader,
+            SiteIntro
         }
     })
-    export default class Entry extends Vue {}
+    export default class Entry extends Vue {
+        LANG = {
+            "parmi": "parmi"
+        };
+
+        changeLang = (newNoun) => {
+            this.LANG.parmi = newNoun;
+        }
+    }
 </script>
