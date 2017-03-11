@@ -1,7 +1,35 @@
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.vscode
+# OS generated files #
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Vuejs build result and test
+dist/
+
+# Editor Files #
+*~
+*.swp
+.editorconfig
+.vs/
+.vscode/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+
+# Dependency directories
 node_modules
+jspm_packages
+
+# Optional npm cache directory
+.npm
+
