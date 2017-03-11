@@ -3,7 +3,7 @@
 <template>
     <ul>
         <li v-for="link in links">
-            <a :href="'#' + link.href">{{ link.text }}</a>
+            <a :href="#" + link.href">{{ link.text }}</a>
         </li>
     </ul>
 </template>
@@ -12,7 +12,7 @@
         Vue,
         Component,
         Prop
-    } from 'av-ts'
+    } from "av-ts";
 
     @Component
     export default class SideNav extends Vue {
@@ -25,7 +25,7 @@
         }, {
             text: "Some Other Page",
             href: "someother"
-        }]
+        }];
 
         construct() {
         }

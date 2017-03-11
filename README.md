@@ -15,6 +15,10 @@ API
 DB
 * SQLite
 
+BANNED PACKAGES
+* yarn
+* lodash
+
 ## Plans
 
 No solid plans yet just drumming around ideas at the moment 

@@ -21,7 +21,7 @@
     }
 </style>
 <script lang="ts">
-    import {Vue, Component} from 'av-ts'
+    import {Vue, Component} from "av-ts";
 
     @Component
     export default class SiteHeader extends Vue {

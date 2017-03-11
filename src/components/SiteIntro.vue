@@ -11,13 +11,13 @@
     }
 </style>
 <script lang="ts">
-    import {Vue, Component, Prop} from 'av-ts'
+    import {Vue, Component, Prop} from "av-ts";
     
     @Component
     export default class SiteIntro extends Vue {
         @Prop
         LANG;
 
-        construct() {}
+        construct() {};
     }
 </script>

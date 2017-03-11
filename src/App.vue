@@ -10,9 +10,9 @@
     }
 </style>
 <script lang="ts">
-    import {Vue, Component} from 'av-ts'
-    import SiteHeader from './components/SiteHeader'
-    import SiteIntro from './components/SiteIntro'
+    import {Vue, Component} from "av-ts";
+    import SiteHeader from "./components/SiteHeader";
+    import SiteIntro from "./components/SiteIntro";
 
     @Component({
         components: {
@@ -20,13 +20,13 @@
             SiteIntro
         }
     })
-    export default class Entry extends Vue {
+    export default class App extends Vue {
         LANG = {
             "parmi": "parmi"
         };
 
         changeLang = (newNoun) => {
             this.LANG.parmi = newNoun;
-        }
+        };
     }
 </script>
