@@ -8,8 +8,8 @@ import (
 
 type Users struct {
 	Id        int    `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
-	Firstname string `gorm:"not null" form:"firstName" json:"firstName"`
-	Lastname  string `gorm:"not null" form:"lastName" json:"lastName"`
+	FirstName string `gorm:"not null" form:"firstName" json:"firstName"`
+	LastName  string `gorm:"not null" form:"lastName" json:"lastName"`
 }
 
 func Cors() gin.HandlerFunc {
@@ -39,7 +39,7 @@ func PostUser(c *gin.Context) {
 	var user Users
 	c.Bind(&user)
 
-	if user.Firstname != "" && user.Lastname != "" {
+	if user.FirstName != "" && user.LastName != "" {
 		db.Create(&user)
 		c.JSON(201, gin.H{"success": user})
 	} else {
@@ -80,15 +80,15 @@ func UpdateUser(c *gin.Context) {
 	var user Users
 	db.First(&user, id)
 
-	if user.Firstname != "" && user.Lastname != "" {
+	if user.FirstName != "" && user.LastName != "" {
 		if user.Id != 0 {
 			var newUser Users
 			c.Bind(&newUser)
 
 			result := Users{
 				Id:        user.Id,
-				Firstname: newUser.Firstname,
-				Lastname:  newUser.Lastname,
+				FirstName: newUser.FirstName,
+				LastName:  newUser.LastName,
 			}
 
 			db.Save(&result)
@@ -98,7 +98,7 @@ func UpdateUser(c *gin.Context) {
 		}
 
 	} else {
-		c.JSON(422, gin.H{"error": "Fields are empty"})
+		c.JSON(422, gin.H{"error": "One or more of the fields are empty"})
 	}
 }
 
