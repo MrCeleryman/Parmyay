@@ -69,4 +69,4 @@ module.exports = app.listen(port, function (err) {
 	if (process.env.NODE_ENV !== "testing") {
 		opn(uri);
 	}
-})
+});

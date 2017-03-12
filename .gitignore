@@ -33,3 +33,9 @@ jspm_packages
 # Optional npm cache directory
 .npm
 npm-debug.log
+
+# Go
+api/bin
+api/pkg
+api/src
+api/data.db

@@ -7,7 +7,7 @@ exports.assetsPath = function (_path) {
 		? config.build.assetsSubDirectory
 		: config.dev.assetsSubDirectory;
 	return path.posix.join(assetsSubDirectory, _path);
-}
+};
 
 exports.cssLoaders = function (options) {
 	options = options || {};
@@ -50,7 +50,7 @@ exports.cssLoaders = function (options) {
 		stylus: generateLoaders("stylus"),
 		styl: generateLoaders("stylus")
 	};
-}
+};
 
 // Generate loaders for standalone style files (outside of .vue)
 exports.styleLoaders = function (options) {

@@ -4,7 +4,7 @@ var packageConfig = require("../package.json");
 var exec = function (cmd) {
 	return require("child_process")
 		.execSync(cmd).toString().trim();
-}
+};
 
 var versionRequirements = [
 	{
