@@ -1,17 +1,9 @@
 <template>
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
-            <!-- Title -->
             <span class="mdl-layout-title">Parmyay</span>
-            <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
-            <!-- Navigation. We hide it in small screens. -->
-            <nav class="mdl-navigation mdl-layout--large-screen-only">
-                Phrasing: 
-                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="language-switch">
-                    <input type="checkbox" id="language-switch" class="mdl-switch__input" checked @change="changeLang">
-                </label>
-            </nav>
+			<tri-switch class="switcher" :option1="option1" :option2="option2" :option3="option3" :option="option" v-on:changeOption="changeOption"/>
         </div>
     </header>
 </template>
@@ -19,17 +11,52 @@
     .mdl-layout--fixed-header {
         padding-bottom: 5px;
     }
+
+	.mdl-layout__header-row {
+		height: 120px;
+	}
+
+	.switcher {
+		margin-right: 50px;
+	}
+
 </style>
 <script lang="ts">
-    import {Vue, Component} from "av-ts";
+    import { Vue, Component } from "av-ts";
+    import TriSwitch from "./triSwitch";
 
-    @Component
+    @Component({
+        components: {
+            TriSwitch
+        }
+    })
     export default class SiteHeader extends Vue {
         construct() {
         }
 
-        changeLang = (e, a) => {
-            this.$emit("changeLang", e.target.checked == true  ? "parmi" : "parma");
-        }
+        option1 = true;
+		option2 = false;
+		option3 = false;
+		option = "parmy";
+
+		changeOption (): void {
+            if(this.option1) {
+				this.option1 = false;
+				this.option2 = true;
+				this.option3 = false;
+				this.option = "parmi";
+			} else if(this.option2) {
+				this.option1 = false;
+				this.option2 = false;
+				this.option3 = true;
+				this.option = "parma";
+			} else {
+				this.option1 = true;
+				this.option2 = false;
+				this.option3 = false;
+				this.option = "parmy";
+			}
+			this.$emit("changeLang", this.option);
+        };
     }
 </script>
