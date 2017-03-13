@@ -31,7 +31,7 @@ BANNED PACKAGES
 * Run ``` go get github.com/mattn/go-sqlite3 ```
 * Run ``` go install github.com/mattn/go-sqlite3 // need gcc ```
 * Run ``` go build ```
-* Run ``` .\api.exe ```
+* Run ``` ./api.exe ```
 * Open up Postman and use it to use the api and stuff
 
 ### Front End
