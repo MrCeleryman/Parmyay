@@ -12,6 +12,7 @@
 		"moduleResolution": "node"
 	},
 	"exclude": [
-		"api"
+		"api",
+		"node_modules"
 	]
 }
