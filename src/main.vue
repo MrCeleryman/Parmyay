@@ -11,8 +11,8 @@
 </style>
 <script lang="ts">
     import { Vue, Component } from "av-ts";
-    import SiteHeader from "./components/siteHeader";
-    import SiteIntro from "./components/siteIntro";
+    import SiteHeader from "./components/navBar";
+    import SiteIntro from "./components/frontPage";
 
     @Component({
         components: {
