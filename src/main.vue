@@ -1,7 +1,7 @@
 <template>
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <site-header v-on:changeLang="changeLang"></site-header>
-    <site-intro :LANG="LANG" ></site-intro>
+    <nav-bar></nav-bar>
+    <front-page></front-page>
   </div>
 </template>
 <style scoped>
@@ -11,22 +11,15 @@
 </style>
 <script lang="ts">
     import { Vue, Component } from "av-ts";
-    import SiteHeader from "./components/navBar";
-    import SiteIntro from "./components/frontPage";
+    import NavBar from "./components/navBar";
+    import FrontPage from "./components/frontPage";
 
     @Component({
         components: {
-            SiteHeader,
-            SiteIntro
+            NavBar,
+            FrontPage
         }
     })
-    export default class App extends Vue {
-        LANG = {
-            "parmy": "parmy"
-        };
-
-        changeLang = (newNoun) => {
-            this.LANG.parmy = newNoun;
-        };
+    export default class Main extends Vue {
     }
 </script>

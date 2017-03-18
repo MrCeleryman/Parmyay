@@ -1,10 +1,9 @@
 <template>
-	<div class="doughnut" v-on:click="changeOption">
-		<div class="switch" v-bind:class="{ option1: option1, option2: option2, option3: option3 }">
+	<div class="doughnut" @click="changeOption">
+		<div class="switch" v-bind:class="optionClass"></div>
+		<div ref="options">
+		<p v-for="(option, index) in localisations" class="choice" v-bind:class="'choice' + (index)">{{ option}} </p> 
 		</div>
-		<p class="choice choice1">Parmy</p>
-		<p class="choice choice2">Parmi</p>
-		<p class="choice choice3">Parma</p>
 	</div>
 </template>
 <style scoped>
@@ -28,17 +27,17 @@
 		0 1px 5px 0 rgba(0,0,0,.12);
 	}
 
-	.option1 {
+	.option0 {
 		left: 15px;
 		top: 10px;
 	}
 
-	.option2 {
+	.option1 {
 		left: -12px;
 		top: 10px;
 	}
 
-	.option3 {
+	.option2 {
 		left: 1px;
 		top: -11px;
 	}
@@ -48,17 +47,17 @@
 		font-size: 16px;
 	}
 
-	.choice1 {
+	.choice0 {
 		left: 40px;
 		top: 10px;
 	}
 
-	.choice2 {
+	.choice1 {
 		left: -50px;
 		top: -30px;
 	}
 
-	.choice3 {
+	.choice2 {
 		left: -10px;
 		top: -140px;
 	}
@@ -66,28 +65,29 @@
 </style>
 <script lang="ts">
     import {Vue, Component, Prop} from "av-ts";
+	import {AllowedLocalisations, LocalisedStrings} from "../util/localisedStrings";
 
-    @Component({
-		data: {
-			option1: this.option1,
-			option2: this.option2,
-			option3: this.option3
-		}
-	})
+    @Component
     export default class TriSwitch extends Vue {
-		@Prop
-	    option1: boolean;
-		@Prop
-		option2: boolean;
-		@Prop
-		option3: boolean;
-		@Prop
-		option: string;
-
-        construct() {};
+		changeIndex = 0;
+		localisations = LocalisedStrings.getLocalisations();
+		optionClass: any = {
+			"option0": true,
+			"option1": false,
+			"option2": false
+		}
 
 		changeOption (): void {
-			this.$emit("changeOption");
+			let allOptions = (this.$refs["options"] as HTMLElement).children;
+			this.optionClass["option" + this.changeIndex] = false;
+			
+			this.changeIndex = ((++this.changeIndex) % allOptions.length);
+
+			this.optionClass["option" + this.changeIndex] = true;
+
+			let newLocalisation = (allOptions[this.changeIndex].innerHTML.trim() as AllowedLocalisations);
+			LocalisedStrings.setLocalisation(newLocalisation)
+			this.$emit("changeOption", newLocalisation);
 		}
     }
 </script>

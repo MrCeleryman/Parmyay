@@ -3,7 +3,7 @@
     <div class="page-content">
 		<div class="main-text">
 			<h1>Parmyay</h1>
-        	<h2>Here to help you find your nearest {{ LANG.parmy }}</h2>
+        	<h2>Here to help you find your nearest {{ localisations.parma }}</h2>
 		</div>
     </div>
   </main>
@@ -22,13 +22,11 @@
 	}
 </style>
 <script lang="ts">
-    import {Vue, Component, Prop} from "av-ts";
-    
-    @Component
-    export default class SiteIntro extends Vue {
-        @Prop
-        LANG;
+    import {Vue, Component, Watch} from "av-ts";
+    import {LocalisedStrings} from "../util/localisedStrings";
 
-        construct() {};
+    @Component
+    export default class FrontPage extends Vue {
+        localisations = LocalisedStrings.currentLocalisation;
     }
 </script>
