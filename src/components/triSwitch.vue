@@ -67,13 +67,7 @@
 <script lang="ts">
     import {Vue, Component, Prop} from "av-ts";
 
-    @Component({
-		data: {
-			option1: this.option1,
-			option2: this.option2,
-			option3: this.option3
-		}
-	})
+    @Component()
     export default class TriSwitch extends Vue {
 		@Prop
 	    option1: boolean;
