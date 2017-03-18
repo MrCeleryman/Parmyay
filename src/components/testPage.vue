@@ -2,8 +2,8 @@
 <main class="mdl-layout__content">
 	<div class="page-content">
 		<div class="main-text">
-			<h1>Parmyay</h1>
-        	<h2>Here to help you find your nearest {{ localisations.parma }}</h2>
+			<h1>Test Page</h1>
+			<h2>This page is to test the routing</h2>
 		</div>
 	</div>
 </main>
@@ -22,11 +22,13 @@
 	}
 </style>
 <script lang="ts">
-    import {Vue, Component, Watch} from "av-ts";
-    import {LocalisedStrings} from "../util/localisedStrings";
-
+    import {Vue, Component, Prop} from "av-ts";
+    
     @Component
     export default class FrontPage extends Vue {
-        localisations = LocalisedStrings.currentLocalisation;
+        @Prop
+        LANG;
+
+        construct() {};
     }
 </script>

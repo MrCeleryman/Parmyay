@@ -1,7 +1,7 @@
 <template>
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <nav-bar></nav-bar>
-    <front-page></front-page>
+    <nav-bar v-on:changeLang="changeLang"></nav-bar>
+	<router-view v-bind:LANG="LANG"></router-view>
   </div>
 </template>
 <style scoped>
