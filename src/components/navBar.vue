@@ -6,7 +6,7 @@
 			</router-link>
 			<router-link :to="{ name: 'test'}" class="testPageLink">Test Page</router-link>
             <div class="mdl-layout-spacer"></div>
-			<tri-switch class="switcher" :option1="option1" :option2="option2" :option3="option3" :option="option" v-on:changeOption="changeOption"/>
+			<tri-switch class="switcher"></tri-switch>
         </div>
     </header>
 </template>
@@ -34,36 +34,9 @@
 
     @Component({
         components: {
-            TriSwitch
+            "tri-switch": TriSwitch
         }
     })
     export default class NavBar extends Vue {
-        construct() {
-        }
-
-        option1 = true;
-		option2 = false;
-		option3 = false;
-		option = "parmy";
-
-		changeOption (): void {
-            if(this.option1) {
-				this.option1 = false;
-				this.option2 = true;
-				this.option3 = false;
-				this.option = "parmi";
-			} else if(this.option2) {
-				this.option1 = false;
-				this.option2 = false;
-				this.option3 = true;
-				this.option = "parma";
-			} else {
-				this.option1 = true;
-				this.option2 = false;
-				this.option3 = false;
-				this.option = "parmy";
-			}
-			this.$emit("changeLang", this.option);
-        };
     }
 </script>
