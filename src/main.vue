@@ -1,7 +1,7 @@
 <template>
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <site-header v-on:changeLang="changeLang"></site-header>
-    <site-intro :LANG="LANG" ></site-intro>
+    <nav-bar v-on:changeLang="changeLang"></nav-bar>
+	<router-view v-bind:LANG="LANG"></router-view>
   </div>
 </template>
 <style scoped>
@@ -11,16 +11,14 @@
 </style>
 <script lang="ts">
     import { Vue, Component } from "av-ts";
-    import SiteHeader from "./components/navBar";
-    import SiteIntro from "./components/frontPage";
+    import NavBar from "./components/navBar";
 
     @Component({
         components: {
-            SiteHeader,
-            SiteIntro
+            NavBar
         }
     })
-    export default class App extends Vue {
+    export default class Main extends Vue {
         LANG = {
             "parmy": "parmy"
         };

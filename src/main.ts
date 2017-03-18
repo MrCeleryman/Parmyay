@@ -1,10 +1,10 @@
 import Vue from "vue";
-import Main from "./main";
+import router from "./routes";
 
 import "./styles/main.css";
 import "material-design-lite";
 
 new Vue({
-	el: "#main",
-	render: h => h(Main)
+	router,
+	el: "#main"
 });

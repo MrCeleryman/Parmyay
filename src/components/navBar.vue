@@ -1,7 +1,10 @@
 <template>
     <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-            <span class="mdl-layout-title">Parmyay</span>
+        <div class="mdl-layout__header-row">      
+			<router-link :to="{ name: 'main'}">
+				<span class="mdl-layout-title">Parmyay</span>
+			</router-link>
+			<router-link :to="{ name: 'test'}" class="testPageLink">Test Page</router-link>
             <div class="mdl-layout-spacer"></div>
 			<tri-switch class="switcher" :option1="option1" :option2="option2" :option3="option3" :option="option" v-on:changeOption="changeOption"/>
         </div>
@@ -20,6 +23,10 @@
 		margin-right: 50px;
 	}
 
+	.testPageLink {
+		padding-left: 50px;
+	}
+
 </style>
 <script lang="ts">
     import { Vue, Component } from "av-ts";
@@ -30,7 +37,7 @@
             TriSwitch
         }
     })
-    export default class SiteHeader extends Vue {
+    export default class NavBar extends Vue {
         construct() {
         }
 
