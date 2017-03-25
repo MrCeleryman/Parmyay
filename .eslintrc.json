@@ -20,7 +20,13 @@
 			"always"
 		],
 		"linebreak-style": "off",
-		"quotes": "off",
+		"quotes": [
+			"error",
+			"double",
+			{
+				"allowTemplateLiterals": true
+			}
+		],
 		"require-jsdoc": "off",
 		"max-len": [
 			"error",
