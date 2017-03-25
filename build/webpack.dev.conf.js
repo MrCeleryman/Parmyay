@@ -15,23 +15,24 @@ module.exports = merge(baseWebpackConfig, {
 	module: {
 		loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap }),
 		rules: [{
-			test: /\.css$/,
-			loader: "css-loader"
-		}, {
-			test: /\.vue$/,
-			loader: "vue-loader",
-			options: {
-				esModule: true,
-				loaders: {
-				},
-				postcss: [
-					require("autoprefixer")({
-						browsers: ["last 2 versions"]
-					})
-				]
-			}
-		}
-		]
+            test: /\.css$/,
+            use: [
+                { loader: "style-loader" },
+                { loader: "css-loader" },
+            ]
+        }, {
+            test: /\.vue$/,
+            loader: 'vue-loader',
+            options: {
+                esModule: true,
+                loaders: {},
+                postcss: [
+                    require('autoprefixer')({
+                        browsers: ['last 2 versions']
+                    })
+                ]
+            }
+        }]
 	},
 	// eval-source-map is faster for development
 	devtool: "#eval-source-map",
