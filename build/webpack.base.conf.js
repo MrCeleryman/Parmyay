@@ -32,10 +32,10 @@ module.exports = {
 	},
 	module: {
 		rules: [{
-			enforce: 'pre',
+			enforce: "pre",
 			test: /.vue$/,
-			loader: 'eslint-loader',
-			exclude: '/node_modules/'
+			loader: "eslint-loader",
+			exclude: "/node_modules/"
 		}, {
 			test: /\.ts$/,
 			loader: "ts-loader",
