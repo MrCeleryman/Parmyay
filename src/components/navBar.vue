@@ -6,7 +6,7 @@
 			</router-link>
 			<router-link :to="{ name: 'test'}" class="testPageLink">Test Page</router-link>
             <div class="mdl-layout-spacer"></div>
-			<tri-switch class="switcher"></tri-switch>
+			<tri-switch></tri-switch>
         </div>
     </header>
 </template>

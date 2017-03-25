@@ -1,93 +1,102 @@
 <template>
-	<div class="doughnut" @click="changeOption">
-		<div class="switch" v-bind:class="optionClass"></div>
-		<div ref="options">
-		<p v-for="(option, index) in localisations" class="choice" v-bind:class="'choice' + (index)">{{ option}} </p> 
-		</div>
-	</div>
+	<svg :width="wheelDimensions.width" :height="wheelDimensions.height/2" @click="changeOption">
+		<g :transform="'translate(' + wheelDimensions.width/2 + ', ' + wheelDimensions.height/4 + ')'">
+			<g class="indicator" v-for="noun in localisations" v-bind:style="{transform: 'rotate(' + noun.rotation + 'deg)', visibility: noun.visibility}">
+				<text>{{ noun.text }}</text>
+				<line :x1="noun.x1" :x2="noun.x2" :y1="noun.y1" :y2="noun.y2"></line>
+			</g>
+		</g>
+	</svg>
 </template>
 <style scoped>
-    .doughnut {
+	svg {
 		cursor: pointer;
-		border: 7px solid rgba(66, 66, 66, 0.258824);
-		border-radius: 100px;
-		height: 25px;
-		width: 25px;
+		user-select: none;
 	}
-
-	.switch {
-		position: relative;
-		background-color: #fafafa;
-		border-radius: 100px;
-		height: 22px;
-		width: 22px;
-		transition: all .3s ease;
-		box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
-		0 3px 1px -2px rgba(0,0,0,.2),
-		0 1px 5px 0 rgba(0,0,0,.12);
+	g.indicator {
+		transform-origin: center bottom 0;
+		transition: transform 500ms ease;
 	}
-
-	.option0 {
-		left: 15px;
-		top: 10px;
+	svg line {
+		stroke: red;
+		fill: red;
+		stroke-width: 2px;
 	}
-
-	.option1 {
-		left: -12px;
-		top: 10px;
-	}
-
-	.option2 {
-		left: 1px;
-		top: -11px;
-	}
-
-	.choice {
-		position: relative;
-		font-size: 16px;
-	}
-
-	.choice0 {
-		left: 40px;
-		top: 10px;
-	}
-
-	.choice1 {
-		left: -50px;
-		top: -30px;
-	}
-
-	.choice2 {
-		left: -10px;
-		top: -140px;
+	svg text {
+		text-anchor: middle;
 	}
 
 </style>
 <script lang="ts">
-    import {Vue, Component, Prop} from "av-ts";
-	import {AllowedLocalisations, LocalisedStrings} from "../util/localisedStrings";
+    import { Vue, Component, Lifecycle } from "av-ts";
+	import { AllowedLocalisations, LocalisedStrings } from "../util/localisedStrings";
+	import * as d3 from "d3";
 
     @Component
     export default class TriSwitch extends Vue {
 		changeIndex = 0;
-		localisations = LocalisedStrings.getLocalisations();
-		optionClass: any = {
-			"option0": true,
-			"option1": false,
-			"option2": false
+		localisations = [];
+
+		wheelDimensions = {
+			width: 0,
+			height: 0
+		};
+
+		private afterInitialise(noun) {
+			noun.y1 = 0;
+			noun.y2 = this.wheelDimensions.height/2 - this.wheelDimensions.height/4;
+			noun.visibility = "visible";
 		}
 
-		changeOption (): void {
-			let allOptions = (this.$refs["options"] as HTMLElement).children;
-			this.optionClass["option" + this.changeIndex] = false;
-			
-			this.changeIndex = ((++this.changeIndex) % allOptions.length);
+		private calculateRotation() {
+			let rotateOut = this.localisations[this.changeIndex];
+			this.afterInitialise(rotateOut);
+			rotateOut.rotation -= 180;
 
-			this.optionClass["option" + this.changeIndex] = true;
+			this.changeIndex = ((++this.changeIndex) % this.localisations.length);
+			let newLocalisation = (this.localisations[this.changeIndex].text as AllowedLocalisations);
 
-			let newLocalisation = (allOptions[this.changeIndex].innerHTML.trim() as AllowedLocalisations);
-			LocalisedStrings.setLocalisation(newLocalisation)
+			let rotateIn = this.localisations[this.changeIndex];
+			this.afterInitialise(rotateIn);
+			rotateIn.rotation -= 180;
+
+			LocalisedStrings.setLocalisation(newLocalisation);
 			this.$emit("changeOption", newLocalisation);
+		}
+
+		@Lifecycle
+		mounted() {
+			let dimensions = (this.$el.parentNode as HTMLElement).getBoundingClientRect();
+			this.wheelDimensions.height = dimensions.height;
+			this.wheelDimensions.width = dimensions.height;
+			this.localisations = LocalisedStrings.getLocalisations().map((x) => {
+				return {
+					"x1": 0,
+					"x2": 0,
+					"y1": 0,
+					"y2": (dimensions.height/2 - (dimensions.height/4)),
+					"rotation": 0,
+					"visibility": "hidden",
+					"text": x
+				};
+			});
+
+			// Strange issue where the css rotation-origin is not applied to the elements.
+			// Applying a setTimeout resolves it since the item is rendered, then changed.
+			// Does not affect the UX majorly since it is invisible when all this happens.
+			setTimeout(() => {
+				this.localisations.forEach((x, i) => {
+					i != 0 ? x.rotation = 180 : "";
+				});
+			}, 100);
+			this.localisations[0].rotation = 0;
+			this.localisations[0].visibility = "visible";
+		}
+
+		changeOption(): void {
+			this.calculateRotation();
+			/*
+			*/
 		}
     }
 </script>

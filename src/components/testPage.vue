@@ -22,10 +22,10 @@
 	}
 </style>
 <script lang="ts">
-    import {Vue, Component, Prop} from "av-ts";
+    import { Vue, Component, Prop } from "av-ts";
     
     @Component
-    export default class FrontPage extends Vue {
+    export default class TestPage extends Vue {
         @Prop
         LANG;
 
