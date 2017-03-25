@@ -3,8 +3,57 @@ body {
     height: 100%;
 }
 
+#home {
+	position: relative;
+}
+
 /* Hack to hide the .indicator since the materialize-css puts its below the active tab */
 
 .tabs-vertical .indicator {
     display: none;
+}
+
+svg {
+	cursor: pointer;
+	user-select: none;
+}
+g.indicator {
+	transform-origin: center bottom 0;
+	transition: transform 500ms ease;
+}
+svg line {
+	stroke: red;
+	fill: red;
+	stroke-width: 2px;
+}
+svg text {
+	text-anchor: middle;
+}
+
+.mdl-layout--fixed-header {
+	padding-bottom: 5px;
+}
+
+.mdl-layout__header-row {
+	height: 120px;
+}
+
+.switcher {
+	margin-right: 50px;
+}
+
+.testPageLink {
+	padding-left: 50px;
+}
+
+h1, h2 {
+	color: green;
+	text-align: center;
+}
+
+.main-text {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%, -40%);
 }

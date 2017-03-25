@@ -18,25 +18,7 @@ var webpackConfig = merge(baseWebpackConfig, {
 				use: ["css-loader"],
 				fallback: "style-loader"
 			})
-		}, {
-			test: /\.vue$/,
-			loader: "vue-loader",
-			options: {
-				esModule: true,
-				loaders: {
-					css: extractCSS.extract({
-						use: "css-loader",
-						fallback: "vue-style-loader"
-					})
-				},
-				postcss: [
-					require("autoprefixer")({
-						browsers: ["last 2 versions"]
-					})
-				]
-			}
-		}
-		]
+		}]
 	},
 	devtool: config.build.productionSourceMap ? "#source-map" : false,
 	output: {
@@ -63,7 +45,7 @@ var webpackConfig = merge(baseWebpackConfig, {
 		// see https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
 			filename: config.build.index,
-			template: "index.html",
+			template: "src/index.html",
 			inject: true,
 			minify: {
 				removeComments: true,

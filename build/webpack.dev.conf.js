@@ -5,6 +5,8 @@ var utils = require("./utils");
 var baseWebpackConfig = require("./webpack.base.conf");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 var path = require("path");
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var extractCSS = new ExtractTextPlugin("[name].css");
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -13,29 +15,20 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 
 module.exports = merge(baseWebpackConfig, {
 	module: {
-		loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap }),
+		loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, extract: true }),
 		rules: [{
 			test: /\.css$/,
-			loader: "css-loader"
-		}, {
-			test: /\.vue$/,
-			loader: "vue-loader",
-			options: {
-				esModule: true,
-				loaders: {
-				},
-				postcss: [
-					require("autoprefixer")({
-						browsers: ["last 2 versions"]
-					})
-				]
-			}
-		}
-		]
+			use: extractCSS.extract({
+				use: ["css-loader"],
+				fallback: "style-loader"
+			})
+		}]
 	},
 	// eval-source-map is faster for development
 	devtool: "#eval-source-map",
 	plugins: [
+		extractCSS,
+		new ExtractTextPlugin(utils.assetsPath("css/[name].[contenthash].css")),
 		new webpack.DefinePlugin({
 			"process.env": config.dev.env
 		}),
@@ -46,7 +39,7 @@ module.exports = merge(baseWebpackConfig, {
 		// https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
 			filename: "index.html",
-			template: "index.html",
+			template: "src/index.html",
 			inject: true
 		})
 	]
