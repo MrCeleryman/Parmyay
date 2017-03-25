@@ -1,0 +1,20 @@
+{
+    "extends": "google",
+    "plugins": [
+        "html"
+    ],
+    "parser": "typescript-eslint-parser",
+    "parserOptions": {
+            "sourceType": "module"
+    },
+    "rules": {
+        "comma-dangle": ["error", {
+            "functions": "never"
+        }],
+        "no-empty-label": "off",
+        "space-after-keywords": "off",
+        "space-return-throw-case": "off",
+        "no-unused-vars": "off",
+        "arrow-body-style": ["error", "always"]
+    }
+}
