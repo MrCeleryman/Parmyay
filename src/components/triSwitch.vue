@@ -29,7 +29,10 @@
 </style>
 <script lang="ts">
     import { Vue, Component, Lifecycle } from "av-ts";
-	import { AllowedLocalisations, LocalisedStrings } from "../util/localisedStrings";
+	import {
+		AllowedLocalisations,
+		LocalisedStrings
+	} from "../util/localisedStrings";
 	import * as d3 from "d3";
 
     @Component
@@ -44,7 +47,8 @@
 
 		private afterInitialise(noun) {
 			noun.y1 = 0;
-			noun.y2 = this.wheelDimensions.height/2 - this.wheelDimensions.height/4;
+			noun.y2 = this.wheelDimensions.height/2 -
+			his.wheelDimensions.height/4;
 			noun.visibility = "visible";
 		}
 
@@ -53,8 +57,10 @@
 			this.afterInitialise(rotateOut);
 			rotateOut.rotation -= 180;
 
-			this.changeIndex = ((++this.changeIndex) % this.localisations.length);
-			let newLocalisation = (this.localisations[this.changeIndex].text as AllowedLocalisations);
+			this.changeIndex = ((++this.changeIndex) %
+			this.localisations.length);
+			let newLocalisation =
+			(this.localisations[this.changeIndex].text as AllowedLocalisations);
 
 			let rotateIn = this.localisations[this.changeIndex];
 			this.afterInitialise(rotateIn);
@@ -66,10 +72,12 @@
 
 		@Lifecycle
 		mounted() {
-			let dimensions = (this.$el.parentNode as HTMLElement).getBoundingClientRect();
+			let dimensions =
+			(this.$el.parentNode as HTMLElement).getBoundingClientRect();
 			this.wheelDimensions.height = dimensions.height;
 			this.wheelDimensions.width = dimensions.height;
-			this.localisations = LocalisedStrings.getLocalisations().map((x) => {
+			this.localisations =
+			LocalisedStrings.getLocalisations().map((x) => {
 				return {
 					"x1": 0,
 					"x2": 0,
