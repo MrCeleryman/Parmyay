@@ -48,7 +48,7 @@
 		private afterInitialise(noun) {
 			noun.y1 = 0;
 			noun.y2 = this.wheelDimensions.height/2 -
-			his.wheelDimensions.height/4;
+			this.wheelDimensions.height/4;
 			noun.visibility = "visible";
 		}
 
