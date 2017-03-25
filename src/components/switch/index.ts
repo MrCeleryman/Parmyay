@@ -3,7 +3,19 @@ import { AllowedLocalisations, LocalisedStrings } from "../../util/localisedStri
 import * as d3 from "d3";
 
 @Component({
-	template: require("./switch.html")
+	template: (
+		`<svg :width="wheelDimensions.width" :height="wheelDimensions.height/2" @click="changeOption">
+			<g :transform="'translate(' + wheelDimensions.width/2 + ', ' + wheelDimensions.height/4 + ')'">
+				<g 
+					class="indicator"
+					v-for="noun in localisations"
+					v-bind:style="{transform: 'rotate(' + noun.rotation + 'deg)', visibility: noun.visibility}">
+					<text>{{ noun.text }}</text>
+					<line :x1="noun.x1" :x2="noun.x2" :y1="noun.y1" :y2="noun.y2"></line>
+				</g>
+			</g>
+		</svg>`
+	)
 })
 export default class Switch extends Vue {
 	private changeIndex = 0;

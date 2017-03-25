@@ -7,7 +7,12 @@ import FrontPage from "./frontPage";
 		"front-page": FrontPage,
 		"nav-bar": NavBar,
 	},
-	template: require("./home.html")
+	template: (
+		`<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+			<nav-bar></nav-bar>
+			<router-view></router-view>
+		</div>`
+	)
 })
 export default class Main extends Vue {
 }

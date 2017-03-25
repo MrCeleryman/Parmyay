@@ -20,7 +20,7 @@ module.exports = {
 		filename: "./[name].js"
 	},
 	resolve: {
-		extensions: [".js", ".html", ".ts", ".tsx", ".css", ".scss"],
+		extensions: [".js", ".ts", ".tsx", ".css", ".scss"],
 		//fallback: [path.join(__dirname, "../node_modules")],
 		alias: {
 			"vue$": "vue/dist/vue.common.js",
@@ -37,11 +37,6 @@ module.exports = {
 			options: { appendTsSuffixTo: [/\.vue$/] },
 			include: [path.resolve(__dirname, "../"), path.resolve(__dirname, "../typings/modules")],
 			exclude: /node_modules/
-		},
-		{	
-			test: /\.html$/,
-			loader: 'raw-loader',
-			exclude: ['./src/index.html']
 		},
 		{
 			test: /\.json$/,
