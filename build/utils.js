@@ -1,6 +1,8 @@
 var path = require("path");
 var config = require("../config");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var ora = require("ora");
+require("shelljs/global");
 
 exports.assetsPath = function (_path) {
 	var assetsSubDirectory = process.env.NODE_ENV === "production"
@@ -65,3 +67,22 @@ exports.styleLoaders = function (options) {
 	}
 	return output;
 };
+
+exports.apiSetup = function (options) {
+	var spinner = ora("setting up api...");
+	spinner.start();
+	mkdir("-p", path.join(__dirname, config.build.apiDirectory, "bin"));
+	mkdir("-p", path.join(__dirname, config.build.apiDirectory, "pkg"));
+	mkdir("-p", path.join(__dirname, config.build.apiDirectory, "src"));
+	process.env["GOPATH"] = path.join(__dirname, config.build.apiDirectory);
+	process.env["GOBIN"] = path.join(__dirname, config.build.apiDirectory, "bin");
+	const exec = require('child_process').exec;
+	exec("cd api && go get", (error, stdout, stderr) => {
+		if (error) {
+			console.error(`\nGO ${error}`);
+			return;
+		}
+	});
+	spinner.stop();
+	return true;
+}
