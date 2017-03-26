@@ -13,8 +13,8 @@ type Venues struct {
 	ID        int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	VenueName string    `gorm:"not null;size:255" form:"venueName" json:"venueName"`
 	Address   string    `gorm:"not null" form:"address" json:"address"`
-	Latitude  float64   `gorm:"not null" form:"firstName" json:"latitude"`
-	Longitude float64   `gorm:"not null" form:"lastName" json:"longitude"`
+	Latitude  float64   `gorm:"not null" form:"latitude" json:"latitude"`
+	Longitude float64   `gorm:"not null" form:"longitude" json:"longitude"`
 	Created   time.Time `gorm:"not null" form:"created" json:"created"`
 	Updated   time.Time `gorm:"not null" form:"updated" json:"updated"`
 	Deleted   NullTime  `form:"deleted" json:"deleted"`
