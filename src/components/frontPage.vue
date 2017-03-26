@@ -22,8 +22,8 @@
 	}
 </style>
 <script lang="ts">
-    import {Vue, Component, Watch} from "av-ts";
-    import {LocalisedStrings} from "../util/localisedStrings";
+    import { Vue, Component, Watch } from "av-ts";
+    import { LocalisedStrings } from "../util/localisedStrings";
 
     @Component
     export default class FrontPage extends Vue {
