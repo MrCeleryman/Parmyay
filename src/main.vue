@@ -1,7 +1,7 @@
 <template>
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <nav-bar></nav-bar>
-	<router-view></router-view>
+    <div>
+        <nav-bar></nav-bar>
+        <router-view></router-view>
   </div>
 </template>
 <style scoped>

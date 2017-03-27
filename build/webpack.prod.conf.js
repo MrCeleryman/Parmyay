@@ -13,30 +13,29 @@ var webpackConfig = merge(baseWebpackConfig, {
 	module: {
 		loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true }),
 		rules: [{
-			test: /\.css$/,
-			use: extractCSS.extract({
-				use: ["css-loader"],
-				fallback: "style-loader"
-			})
-		}, {
-			test: /\.vue$/,
-			loader: "vue-loader",
-			options: {
-				esModule: true,
-				loaders: {
-					css: extractCSS.extract({
-						use: "css-loader",
-						fallback: "vue-style-loader"
-					})
-				},
-				postcss: [
-					require("autoprefixer")({
-						browsers: ["last 2 versions"]
-					})
-				]
-			}
-		}
-		]
+            test: /\.css$/,
+            use: extractCSS.extract({
+                use: ['css-loader'],
+                fallback: 'style-loader'
+            })
+        }, {
+            test: /\.vue$/,
+            loader: 'vue-loader',
+            options: {
+                esModule: true,
+                loaders: {
+                    css: extractCSS.extract({
+                        use: 'css-loader',
+                        fallback: 'vue-style-loader'
+                    })
+                },
+                postcss: [
+                    require('autoprefixer')({
+                        browsers: ['last 2 versions']
+                    })
+                ]
+            }
+        }]
 	},
 	devtool: config.build.productionSourceMap ? "#source-map" : false,
 	output: {
