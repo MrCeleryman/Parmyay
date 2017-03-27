@@ -12,7 +12,9 @@ dist/
 *.swp
 .editorconfig
 .vs/
-.vscode/
+
+# Allow .vscode for workspace settings
+# .vscode/
 
 # Logs
 logs
