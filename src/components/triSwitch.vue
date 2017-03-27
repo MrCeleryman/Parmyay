@@ -1,17 +1,14 @@
 <template>
 	<svg :width="dimensions.width" :height="dimensions.height/2" 
 		@click="changeOption">
-
 		<g :transform="'translate(' 
 			+ dimensions.width/2 + ', ' + dimensions.height/4 + ')'">
-
 			<g class="indicator" 
 				v-for="noun in localisations" 
 				v-bind:style="{
 					transform: 'rotate(' + noun.rotation + 'deg)', 
 					visibility: noun.visibility
 				}">
-
 				<text>{{ noun.text }}</text>
 				<line :x1="noun.x1" :x2="noun.x2" 
 					:y1="noun.y1" :y2="noun.y2"></line>
