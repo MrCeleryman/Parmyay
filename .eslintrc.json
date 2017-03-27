@@ -16,8 +16,14 @@
 		"keyword-spacing": "error",
 		"no-unused-vars": "off",
 		"arrow-body-style": [
-			"error",
-			"always"
+			"error", 
+			"as-needed", { 
+				"requireReturnForObjectLiteral": true 
+			}
+		],
+		"arrow-parens": [
+			"error", 
+			"as-needed"
 		],
 		"linebreak-style": "off",
 		"quotes": [

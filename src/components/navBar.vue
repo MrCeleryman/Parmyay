@@ -1,32 +1,28 @@
 <template>
-    <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">      
-			<router-link :to="{ name: 'main'}">
-				<span class="mdl-layout-title">Parmyay</span>
-			</router-link>
-			<router-link :to="{ name: 'test'}" class="testPageLink">Test Page</router-link>
-            <div class="mdl-layout-spacer"></div>
-			<tri-switch></tri-switch>
-        </div>
-    </header>
+<md-toolbar class="md-accent">
+    <router-link :to="{ name: 'test'}" class="router-link">
+        <md-button class="md-icon-button">
+            <md-icon>favorite</md-icon>
+        </md-button>
+    </router-link>
+    <h2 class="md-title">
+        <router-link :to="{ name: 'main'}" class="router-link">
+            <span class="md-title-link">Parmyay</span>
+        </router-link>
+    </h2>
+  <tri-switch></tri-switch>
+</md-toolbar>
 </template>
 <style scoped>
-    .mdl-layout--fixed-header {
-        padding-bottom: 5px;
+    .md-title {
+        flex: 1;
     }
-
-	.mdl-layout__header-row {
-		height: 120px;
-	}
-
-	.switcher {
-		margin-right: 50px;
-	}
-
-	.testPageLink {
-		padding-left: 50px;
-	}
-
+    .md-title a:hover {
+        text-decoration: none !important;
+    }
+    .router-link {
+        color: #fff !important;
+    }
 </style>
 <script lang="ts">
     import { Vue, Component } from "av-ts";
