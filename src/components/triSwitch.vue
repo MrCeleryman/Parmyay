@@ -59,7 +59,6 @@
 		private afterInitialise(noun) {
 			noun.y1 = 0;
 			noun.y2 = this.dimensions.height/2 - this.dimensions.height/4;
-
 			noun.visibility = "visible";
 		}
 
