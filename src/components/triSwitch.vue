@@ -36,15 +36,15 @@
 
 </style>
 <script lang="ts">
-    import { Vue, Component, Lifecycle } from "av-ts";
+	import { Vue, Component, Lifecycle } from "av-ts";
 	import {
 		AllowedLocalisations,
 		LocalisedStrings
 	} from "../util/localisedStrings";
 	import * as d3 from "d3";
 
-    @Component
-    export default class TriSwitch extends Vue {
+	@Component
+	export default class TriSwitch extends Vue {
 		changeIndex = 0;
 		localisations = [];
 
@@ -114,5 +114,5 @@
 		changeOption(): void {
 			this.calculateRotation();
 		}
-    }
+	}
 </script>

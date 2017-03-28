@@ -34,23 +34,20 @@
 		margin: 8px;
 	}
 </style>
-<script lang="ts">
-    import { Vue, Component, Watch } from "av-ts";
+	<script lang="ts">
+	import { Vue, Component, Watch } from "av-ts";
 	import ReviewText from "./reviewText";
-    import { LocalisedStrings } from "../util/localisedStrings";
-
+	import { LocalisedStrings } from "../util/localisedStrings";
 	import { TempReviews } from "../util/TempReviews";
 	import { Review } from "API";
 
-    @Component({
+	@Component({
 		components: {
 			"review-text": ReviewText
 		}
 	})
-    export default class FrontPage extends Vue {
-        localisations = LocalisedStrings.currentLocalisation;
-
+	export default class FrontPage extends Vue {
+		localisations = LocalisedStrings.currentLocalisation;
 		recentParmies: Review[] = TempReviews.getTempReviews();
-
-    }
+	}
 </script>
