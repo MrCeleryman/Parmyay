@@ -60,9 +60,12 @@ func (nt NullTime) Value() (driver.Value, error) {
 	return nt.Time, nil
 }
 
-func main() {
-	//gin.SetMode(gin.ReleaseMode) //For Release
+func SetupRouter(release bool, log bool) *gin.Engine {
 	router := gin.Default()
+	if release == true || log == false {
+		gin.SetMode(gin.ReleaseMode) //For Release
+		router = gin.New()
+	}
 	router.Use(Cors())
 
 	v1 := router.Group("api/v1")
@@ -111,5 +114,10 @@ func main() {
 		achievements.OPTIONS("/:id", OptionsAchievement)
 	}
 
+	return router
+}
+
+func main() {
+	router := SetupRouter(false, true)
 	router.Run(":8900")
 }
