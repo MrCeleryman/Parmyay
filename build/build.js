@@ -1,6 +1,6 @@
 // https://github.com/shelljs/shelljs
 require("./check-versions")();
-require("shelljs/global");
+var shell = require("shelljs");
 var utils = require("./utils");
 env.NODE_ENV = "production";
 
@@ -22,10 +22,13 @@ var spinner = ora("building for production...");
 spinner.start();
 
 var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory);
-rm("-rf", assetsPath);
-mkdir("-p", assetsPath);
+shell.rm("-rf", assetsPath);
+shell.mkdir("-p", assetsPath);
 
-cp("-R", "static/*", assetsPath);
+// See if static directory exists
+if (shell.test("-e", "static") && shell.test("-d", "static")) {
+	shell.cp("-R", "static/*", assetsPath);
+}
 
 webpack(webpackConfig, function (err, stats) {
 	spinner.stop()
