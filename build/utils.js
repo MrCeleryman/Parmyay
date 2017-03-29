@@ -5,9 +5,9 @@ var ora = require("ora");
 var shell = require("shelljs");
 
 exports.assetsPath = function (_path) {
-	var assetsSubDirectory = process.env.NODE_ENV === "production"
-		? config.build.assetsSubDirectory
-		: config.dev.assetsSubDirectory;
+	var assetsSubDirectory = process.env.NODE_ENV === "production" ?
+		config.build.assetsSubDirectory :
+		config.dev.assetsSubDirectory;
 	return path.posix.join(assetsSubDirectory, _path);
 };
 
@@ -68,22 +68,32 @@ exports.styleLoaders = function (options) {
 	return output;
 };
 
-exports.apiSetup = function (options) {
+exports.apiSetup = function () {
 	var spinner = ora("Setting up api...");
 	spinner.start();
 	shell.mkdir("-p", path.join(__dirname, config.build.apiDirectory, "bin"));
 	shell.mkdir("-p", path.join(__dirname, config.build.apiDirectory, "pkg"));
 	shell.mkdir("-p", path.join(__dirname, config.build.apiDirectory, "src"));
 
-	process.env["GOPATH"] = path.join(__dirname, config.build.apiDirectory);
-	process.env["GOBIN"] = path.join(__dirname, config.build.apiDirectory, "bin");
-	var goOutput = shell.exec("cd api && go get");
-	
-	console.log(goOutput.stdout);
-	if (goOutput.stderr) {
-		spinner.stop();		
-		throw Error(`\nGO ${goOutput.stderr}`)
+	let errorMessage = (err) => {
+		console.log(`\nWARN: ${err} not on path. Not building API. \n`)
 	}
-	spinner.stop();	
+	
+	if (!shell.which("go")) {
+		errorMessage("go");
+	} else if (!shell.which("gcc")) {
+		errorMessage("gcc")
+	} else {
+		process.env["GOPATH"] = path.join(__dirname, config.build.apiDirectory);
+		process.env["GOBIN"] = path.join(__dirname, config.build.apiDirectory, "bin");
+		var goOutput = shell.exec(`cd api && go get`);
+		console.log(goOutput.stdout);
+
+		if (goOutput.stderr) {
+			spinner.stop();
+			throw Error(`\nGO ${goOutput.stderr}`)
+		}
+	}
+	spinner.stop();
 	return true;
 }
