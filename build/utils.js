@@ -2,7 +2,7 @@ var path = require("path");
 var config = require("../config");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ora = require("ora");
-require("shelljs/global");
+var shell = require("shelljs");
 
 exports.assetsPath = function (_path) {
 	var assetsSubDirectory = process.env.NODE_ENV === "production"
@@ -69,20 +69,21 @@ exports.styleLoaders = function (options) {
 };
 
 exports.apiSetup = function (options) {
-	var spinner = ora("setting up api...");
+	var spinner = ora("Setting up api...");
 	spinner.start();
-	mkdir("-p", path.join(__dirname, config.build.apiDirectory, "bin"));
-	mkdir("-p", path.join(__dirname, config.build.apiDirectory, "pkg"));
-	mkdir("-p", path.join(__dirname, config.build.apiDirectory, "src"));
+	shell.mkdir("-p", path.join(__dirname, config.build.apiDirectory, "bin"));
+	shell.mkdir("-p", path.join(__dirname, config.build.apiDirectory, "pkg"));
+	shell.mkdir("-p", path.join(__dirname, config.build.apiDirectory, "src"));
+
 	process.env["GOPATH"] = path.join(__dirname, config.build.apiDirectory);
 	process.env["GOBIN"] = path.join(__dirname, config.build.apiDirectory, "bin");
-	const exec = require('child_process').exec;
-	exec("cd api && go get", (error, stdout, stderr) => {
-		if (error) {
-			console.error(`\nGO ${error}`);
-			return;
-		}
-	});
-	spinner.stop();
+	var goOutput = shell.exec("cd api && go get");
+	
+	console.log(goOutput.stdout);
+	if (goOutput.stderr) {
+		spinner.stop();		
+		throw Error(`\nGO ${goOutput.stderr}`)
+	}
+	spinner.stop();	
 	return true;
 }
