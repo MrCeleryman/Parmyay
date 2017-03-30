@@ -2,7 +2,7 @@
 require("./check-versions")();
 var shell = require("shelljs");
 var utils = require("./utils");
-env.NODE_ENV = "production";
+process.env.NODE_ENV = "production";
 
 var path = require("path");
 var config = require("../config");

@@ -39,7 +39,6 @@
 	import ReviewText from "./reviewText";
 	import { LocalisedStrings } from "../util/localisedStrings";
 	import { TempReviews } from "../util/TempReviews";
-	import { Review } from "API";
 
 	@Component({
 		components: {
@@ -48,6 +47,6 @@
 	})
 	export default class FrontPage extends Vue {
 		localisations = LocalisedStrings.currentLocalisation;
-		recentParmies: Review[] = TempReviews.getTempReviews();
+		recentParmies: API.Review[] = TempReviews.getTempReviews();
 	}
 </script>

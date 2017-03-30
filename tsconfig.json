@@ -16,7 +16,7 @@
 		"api"
 	],
 	"files": [
-		"./index.d.ts",
-	    "./src/main.ts"
+		"./src/index.d.ts",
+		"./src/main.ts"
 	]
 }
