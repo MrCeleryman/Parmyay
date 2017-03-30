@@ -85,7 +85,7 @@ func UpdateVenue(c *gin.Context) {
 			}
 
 			db.Save(&result)
-			c.JSON(201, gin.H{"success": result})
+			c.JSON(200, gin.H{"success": result})
 		} else {
 			c.JSON(404, gin.H{"error": "Venue not found"})
 		}
@@ -113,7 +113,7 @@ func DeleteVenue(c *gin.Context) {
 		}
 
 		db.Save(&result)
-		c.JSON(201, gin.H{"success": result})
+		c.JSON(200, gin.H{"success": result})
 	} else {
 		c.JSON(404, gin.H{"error": "Venue #" + id + " not found"})
 	}

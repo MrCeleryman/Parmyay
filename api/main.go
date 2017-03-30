@@ -63,6 +63,46 @@ func InitDb() *gorm.DB {
 		achievement.ID = 2
 		achievement.Achievement = "Ate first Parmy!"
 		db.Create(&achievement)
+
+		var venue Venues
+		venue.ID = 1
+		venue.Address = "30 Willy Wonka Way"
+		venue.VenueName = "Dans House"
+		db.Create(&venue)
+		venue.ID = 2
+		venue.Address = "42 Wallaby Way, Sydney"
+		venue.VenueName = "Dans Old House"
+		db.Create(&venue)
+
+		var user Users
+		user.ID = 1
+		user.FirstName = "Daniel"
+		user.LastName = "Mitchell"
+		user.UserName = "DMitch"
+		user.Email = "d@gmail.com"
+		user.Password = []byte("Daniel")
+		db.Create(&user)
+		user.ID = 2
+		user.FirstName = "Jerry"
+		user.LastName = "Seinfield"
+		user.UserName = "Beemovie4lyf"
+		user.Email = "beemovie@gmail.com"
+		user.Password = []byte("Daniel")
+		db.Create(&user)
+
+		var review Reviews
+		review.ID = 1
+		review.Notes = "It was pretty good"
+		review.UserID = 1
+		review.VenueID = 1
+		review.Rating = 10
+		db.Create(&review)
+		review.ID = 2
+		review.Notes = "Too much water"
+		review.UserID = 1
+		review.VenueID = 1
+		review.Rating = 7.8
+		db.Create(&review)
 	}
 	return db
 }

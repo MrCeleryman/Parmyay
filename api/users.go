@@ -3,6 +3,8 @@ package main
 import (
 	"time"
 
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -27,9 +29,8 @@ func PostUser(c *gin.Context) {
 
 	var user Users
 	c.Bind(&user)
-
-	if user.FirstName != "" && user.LastName != "" && user.UserName != "" &&
-		user.Password != nil && user.Email != "" {
+	fmt.Println(user.Password)
+	if user.FirstName != "" && user.LastName != "" && user.UserName != "" && user.Password != nil && user.Email != "" {
 		user.Created = time.Now()
 		user.Updated = time.Now()
 		db.Create(&user)
@@ -55,8 +56,8 @@ func GetUser(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 	var user Users
-	db.First(&user, id)
 
+	db.First(&user, id)
 	if user.ID != 0 {
 		c.JSON(200, user)
 	} else {
@@ -89,7 +90,7 @@ func UpdateUser(c *gin.Context) {
 			}
 
 			db.Save(&result)
-			c.JSON(201, gin.H{"success": result})
+			c.JSON(200, gin.H{"success": result})
 		} else {
 			c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 		}
@@ -117,7 +118,7 @@ func DeleteUser(c *gin.Context) {
 		}
 
 		db.Save(&result)
-		c.JSON(201, gin.H{"success": result})
+		c.JSON(200, gin.H{"success": result})
 	} else {
 		c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 	}
