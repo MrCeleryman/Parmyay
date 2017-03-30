@@ -9,6 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Venues DB Model
 type Venues struct {
 	ID        int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	VenueName string    `gorm:"not null;size:255" form:"venueName" json:"venueName"`
@@ -21,6 +22,7 @@ type Venues struct {
 	Reviews   []Reviews `form:"reviews" json:"reviews"`
 }
 
+// PostVenue creates a Venue
 func PostVenue(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -38,6 +40,7 @@ func PostVenue(c *gin.Context) {
 	}
 }
 
+// GetVenues gets all Venues
 func GetVenues(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -47,6 +50,7 @@ func GetVenues(c *gin.Context) {
 	c.JSON(200, venues)
 }
 
+// GetVenue gets a Venue
 func GetVenue(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -62,6 +66,7 @@ func GetVenue(c *gin.Context) {
 	}
 }
 
+// UpdateVenue updates a Venue
 func UpdateVenue(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -95,6 +100,7 @@ func UpdateVenue(c *gin.Context) {
 	}
 }
 
+// DeleteVenue soft deletes a venue by setting the deleted date
 func DeleteVenue(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -119,6 +125,7 @@ func DeleteVenue(c *gin.Context) {
 	}
 }
 
+// OptionsVenue allows DELETE, POST and PUT to come through
 func OptionsVenue(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
 	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")

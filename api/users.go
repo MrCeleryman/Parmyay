@@ -9,6 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Users DB Model
 type Users struct {
 	ID           int            `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserName     string         `gorm:"not null;size:64" form:"userName" json:"userName"`
@@ -23,6 +24,7 @@ type Users struct {
 	Reviews      []Reviews      `form:"reviews" json:"reviews"`
 }
 
+// PostUser creates a User
 func PostUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -40,6 +42,7 @@ func PostUser(c *gin.Context) {
 	}
 }
 
+// GetUsers gets all Users
 func GetUsers(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -50,6 +53,7 @@ func GetUsers(c *gin.Context) {
 	c.JSON(200, users)
 }
 
+// GetUser gets a User
 func GetUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -65,6 +69,7 @@ func GetUser(c *gin.Context) {
 	}
 }
 
+// UpdateUser updates a User
 func UpdateUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -100,6 +105,7 @@ func UpdateUser(c *gin.Context) {
 	}
 }
 
+// DeleteUser soft deletes a user by setting the deleted date
 func DeleteUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -124,6 +130,7 @@ func DeleteUser(c *gin.Context) {
 	}
 }
 
+// OptionsUser allows DELETE, POST and PUT to come through
 func OptionsUser(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
 	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")

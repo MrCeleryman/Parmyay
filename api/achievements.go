@@ -5,11 +5,13 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Achievements DB Model
 type Achievements struct {
 	ID          int    `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	Achievement string `gorm:"not null" form:"achievement" json:"achievement"`
 }
 
+// PostAchievement Create an Achievement
 func PostAchievement(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -26,6 +28,7 @@ func PostAchievement(c *gin.Context) {
 	}
 }
 
+// GetAchievements Gets all achievements
 func GetAchievements(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -35,6 +38,7 @@ func GetAchievements(c *gin.Context) {
 	c.JSON(200, achievements)
 }
 
+// GetAchievement Gets an achievement
 func GetAchievement(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -50,6 +54,7 @@ func GetAchievement(c *gin.Context) {
 	}
 }
 
+// UpdateAchievement updates an Achievements
 func UpdateAchievement(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -77,6 +82,7 @@ func UpdateAchievement(c *gin.Context) {
 	}
 }
 
+// DeleteAchievement deletes an achievement
 func DeleteAchievement(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -93,6 +99,7 @@ func DeleteAchievement(c *gin.Context) {
 	}
 }
 
+// OptionsAchievement allows DELETE, POST and PUT to come through
 func OptionsAchievement(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Methods", "DELETE,POST, PUT")
 	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")

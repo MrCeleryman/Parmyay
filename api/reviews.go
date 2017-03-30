@@ -8,6 +8,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Reviews DB Model
 type Reviews struct {
 	ID      int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserID  int       `gorm:"index" form:"userId" json:"userId"`
@@ -19,6 +20,7 @@ type Reviews struct {
 	ValidTo NullTime  `form:"deleted" json:"deleted"`
 }
 
+// PostReview creates a review
 func PostReview(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -51,6 +53,7 @@ func PostReview(c *gin.Context) {
 	}
 }
 
+// GetReviews gets all reviews
 func GetReviews(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -60,6 +63,7 @@ func GetReviews(c *gin.Context) {
 	c.JSON(200, reviews)
 }
 
+// GetReview gets a review
 func GetReview(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -75,6 +79,7 @@ func GetReview(c *gin.Context) {
 	}
 }
 
+// UpdateReview updates a review
 func UpdateReview(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -106,6 +111,7 @@ func UpdateReview(c *gin.Context) {
 	}
 }
 
+// DeleteReview soft deletes a review by setting the deleted date
 func DeleteReview(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -130,6 +136,7 @@ func DeleteReview(c *gin.Context) {
 	}
 }
 
+// OptionsReview allows DELETE, POST and PUT to come through
 func OptionsReview(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
 	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")

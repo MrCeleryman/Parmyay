@@ -11,14 +11,15 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// IsInt checkes whether a given string is an integer
 func IsInt(s string) bool {
 	if _, err := strconv.Atoi(s); err == nil {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
+// Cors sets up Cors to allow Cross Origin requests
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
@@ -26,6 +27,7 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
+// InitDb initializes the Database depending on the test environment variable
 func InitDb() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "./data.db")
 	db.LogMode(true)
@@ -107,6 +109,7 @@ func InitDb() *gorm.DB {
 	return db
 }
 
+// NullTime is a model to allow for a nullable time
 type NullTime struct {
 	Time  time.Time `form:"time" json:"time"`
 	Valid bool      `form:"valid" json:"valid"` // Valid is true if Time is not NULL
@@ -126,6 +129,7 @@ func (nt NullTime) Value() (driver.Value, error) {
 	return nt.Time, nil
 }
 
+// SetupRouter sets up the Router to route requests to the functions
 func SetupRouter(release bool, log bool) *gin.Engine {
 	if release == true {
 		gin.SetMode(gin.ReleaseMode)

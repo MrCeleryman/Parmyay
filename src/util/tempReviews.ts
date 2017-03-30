@@ -1,8 +1,6 @@
-import { Review, User, Venue } from "API";
-
 export class TempReviews {
-    public static getTempReviews(): Review[] {
-        let U1: User = {
+	public static getTempReviews(): API.Review[] {
+		let U1: API.User = {
 			id: 0,
 			userName: "MrParm",
 			password: null,
@@ -14,10 +12,10 @@ export class TempReviews {
 			deleted: null,
 			reviews: null
 		};
-		let U2: User = Object.assign({}, U1, { id: 1, userName: "Parminator"});
-		let U3: User = Object.assign({}, U1, { id: 2, userName: "PassTheParmy"});
+		let U2: API.User = Object.assign({}, U1, { id: 1, userName: "Parminator" });
+		let U3: API.User = Object.assign({}, U1, { id: 2, userName: "PassTheParmy" });
 
-		let V1: Venue = {
+		let V1: API.Venue = {
 			id: 0,
 			venueName: "RE",
 			address: "10 High St, Toowong QLD 4066",
@@ -28,11 +26,11 @@ export class TempReviews {
 			deleted: null,
 			reviews: null
 		};
-		let V2: Venue = Object.assign({}, V1, { id: 1, venueName: "Red Room"});
-		let V3: Venue = Object.assign({}, V1, { id: 2, venueName: "Grand Central"});
-		let V4: Venue = Object.assign({}, V1, { id: 3, venueName: "Flying Cock"});
-		
-        let reviews = [{
+		let V2: API.Venue = Object.assign({}, V1, { id: 1, venueName: "Red Room" });
+		let V3: API.Venue = Object.assign({}, V1, { id: 2, venueName: "Grand Central" });
+		let V4: API.Venue = Object.assign({}, V1, { id: 3, venueName: "Flying Cock" });
+
+		let reviews = [{
 			id: 0,
 			userId: 0,
 			user: U1,
@@ -82,6 +80,6 @@ export class TempReviews {
 			deleted: null
 		}];
 
-        return reviews;
-    }
+		return reviews;
+	}
 }
