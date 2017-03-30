@@ -41,4 +41,5 @@ api/bin
 api/pkg
 api/src
 api/data.db
+api/test.db
 api/api.exe

@@ -16,7 +16,9 @@ func PostAchievement(c *gin.Context) {
 
 	var achievement Achievements
 	c.Bind(&achievement)
-	if achievement.Achievement != "" {
+	if IsInt(achievement.Achievement) {
+		c.JSON(400, gin.H{"error": "No Numbers allowed"})
+	} else if achievement.Achievement != "" {
 		db.Create(&achievement)
 		c.JSON(201, gin.H{"success": achievement})
 	} else {
@@ -56,24 +58,22 @@ func UpdateAchievement(c *gin.Context) {
 	var achievement Achievements
 	db.First(&achievement, id)
 
-	if achievement.Achievement != "" {
-		if achievement.ID != 0 {
-			var newAchievement Achievements
-			c.Bind(&newAchievement)
-
+	if achievement.ID != 0 {
+		var newAchievement Achievements
+		c.Bind(&newAchievement)
+		if newAchievement.Achievement != "" {
 			result := Achievements{
 				ID:          achievement.ID,
 				Achievement: newAchievement.Achievement,
 			}
-
 			db.Save(&result)
 			c.JSON(200, gin.H{"success": result})
 		} else {
-			c.JSON(404, gin.H{"error": "Achievement not found"})
+			c.JSON(422, gin.H{"error": "One or more of the fields are empty"})
 		}
 
 	} else {
-		c.JSON(422, gin.H{"error": "One or more of the fields are empty"})
+		c.JSON(404, gin.H{"error": "Achievement not found"})
 	}
 }
 
@@ -87,7 +87,7 @@ func DeleteAchievement(c *gin.Context) {
 
 	if achievement.ID != 0 {
 		db.Delete(&achievement)
-		c.JSON(200, gin.H{"success": "Achievement #" + id + " deleted"})
+		c.Status(204)
 	} else {
 		c.JSON(404, gin.H{"error": "Achievement not found"})
 	}

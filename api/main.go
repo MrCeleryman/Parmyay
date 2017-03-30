@@ -2,11 +2,22 @@ package main
 
 import (
 	"database/sql/driver"
+	"strconv"
 	"time"
+
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
+
+func IsInt(s string) bool {
+	if _, err := strconv.Atoi(s); err == nil {
+		return true
+	} else {
+		return false
+	}
+}
 
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -18,6 +29,11 @@ func Cors() gin.HandlerFunc {
 func InitDb() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "./data.db")
 	db.LogMode(true)
+	if os.Getenv("TEST") == "1" {
+		db, err = gorm.Open("sqlite3", "./test.db")
+		db.DropTableIfExists(&Achievements{}, &Reviews{}, &Users{}, &Venues{})
+		db.LogMode(false)
+	}
 	if err != nil {
 		panic(err)
 	}
@@ -37,6 +53,16 @@ func InitDb() *gorm.DB {
 	if !db.HasTable(&Venues{}) {
 		db.CreateTable(&Venues{})
 		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&Venues{})
+	}
+
+	if os.Getenv("TEST") == "1" {
+		var achievement Achievements
+		achievement.ID = 1
+		achievement.Achievement = "Reviewed first Parmy!"
+		db.Create(&achievement)
+		achievement.ID = 2
+		achievement.Achievement = "Ate first Parmy!"
+		db.Create(&achievement)
 	}
 	return db
 }
@@ -61,9 +87,11 @@ func (nt NullTime) Value() (driver.Value, error) {
 }
 
 func SetupRouter(release bool, log bool) *gin.Engine {
+	if release == true {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	router := gin.Default()
-	if release == true || log == false {
-		gin.SetMode(gin.ReleaseMode) //For Release
+	if log == false {
 		router = gin.New()
 	}
 	router.Use(Cors())
@@ -113,7 +141,6 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 		achievements.OPTIONS("/", OptionsAchievement)
 		achievements.OPTIONS("/:id", OptionsAchievement)
 	}
-
 	return router
 }
 
