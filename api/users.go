@@ -3,10 +3,13 @@ package main
 import (
 	"time"
 
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Users DB Model
 type Users struct {
 	ID           int            `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserName     string         `gorm:"not null;size:64" form:"userName" json:"userName"`
@@ -21,15 +24,15 @@ type Users struct {
 	Reviews      []Reviews      `form:"reviews" json:"reviews"`
 }
 
+// PostUser creates a User
 func PostUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
 	var user Users
 	c.Bind(&user)
-
-	if user.FirstName != "" && user.LastName != "" && user.UserName != "" &&
-		user.Password != nil && user.Email != "" {
+	fmt.Println(user.Password)
+	if user.FirstName != "" && user.LastName != "" && user.UserName != "" && user.Password != nil && user.Email != "" {
 		user.Created = time.Now()
 		user.Updated = time.Now()
 		db.Create(&user)
@@ -39,6 +42,7 @@ func PostUser(c *gin.Context) {
 	}
 }
 
+// GetUsers gets all Users
 func GetUsers(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -49,14 +53,15 @@ func GetUsers(c *gin.Context) {
 	c.JSON(200, users)
 }
 
+// GetUser gets a User
 func GetUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
 	id := c.Params.ByName("id")
 	var user Users
-	db.First(&user, id)
 
+	db.First(&user, id)
 	if user.ID != 0 {
 		c.JSON(200, user)
 	} else {
@@ -64,6 +69,7 @@ func GetUser(c *gin.Context) {
 	}
 }
 
+// UpdateUser updates a User
 func UpdateUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -89,7 +95,7 @@ func UpdateUser(c *gin.Context) {
 			}
 
 			db.Save(&result)
-			c.JSON(201, gin.H{"success": result})
+			c.JSON(200, gin.H{"success": result})
 		} else {
 			c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 		}
@@ -99,6 +105,7 @@ func UpdateUser(c *gin.Context) {
 	}
 }
 
+// DeleteUser soft deletes a user by setting the deleted date
 func DeleteUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
@@ -117,12 +124,13 @@ func DeleteUser(c *gin.Context) {
 		}
 
 		db.Save(&result)
-		c.JSON(201, gin.H{"success": result})
+		c.JSON(200, gin.H{"success": result})
 	} else {
 		c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 	}
 }
 
+// OptionsUser allows DELETE, POST and PUT to come through
 func OptionsUser(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
 	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")

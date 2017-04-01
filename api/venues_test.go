@@ -1,23 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func TestGetVenues(t *testing.T) {
-	testRouter := SetupRouter(false, false)
-	req, err := http.NewRequest("GET", "/api/v1/venues/", nil)
-	if err != nil {
-		fmt.Println(err)
-	}
-	resp := httptest.NewRecorder()
-	testRouter.ServeHTTP(resp, req)
-	if resp.Code != 200 {
-		t.Errorf("Expected 200")
-	}
+	GetFunc(t, "/api/v1/venues/", 200)
+}
+
+func TestGetVenueIncorrectId(t *testing.T) {
+	GetFunc(t, "/api/v1/venues/0", 404)
+}
+
+func TestGetVenueCorrectId(t *testing.T) {
+	GetFunc(t, "/api/v1/venues/1", 200)
+}
+
+func TestDeleteVenueCorrectId(t *testing.T) {
+	SoftDeleteFunc(t, "/api/v1/venues/2", 200)
+}
+
+func TestDeleteVenueIncorrectId(t *testing.T) {
+	SoftDeleteFunc(t, "/api/v1/venues/0", 404)
 }

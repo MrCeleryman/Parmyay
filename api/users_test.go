@@ -1,23 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func TestGetUsers(t *testing.T) {
-	testRouter := SetupRouter(false, false)
-	req, err := http.NewRequest("GET", "/api/v1/users/", nil)
-	if err != nil {
-		fmt.Println(err)
-	}
-	resp := httptest.NewRecorder()
-	testRouter.ServeHTTP(resp, req)
-	if resp.Code != 200 {
-		t.Errorf("Expected 200")
-	}
+	GetFunc(t, "/api/v1/users/", 200)
+}
+
+func TestGetUsersCorrectId(t *testing.T) {
+	GetFunc(t, "/api/v1/users/1", 200)
+}
+
+func TestGetUsersIncorrectId(t *testing.T) {
+	GetFunc(t, "/api/v1/users/0", 404)
+}
+
+func TestDeleteUsersCorrectId(t *testing.T) {
+	SoftDeleteFunc(t, "/api/v1/users/2", 200)
+}
+
+func TestDeleteUsersIncorrectId(t *testing.T) {
+	SoftDeleteFunc(t, "/api/v1/users/0", 404)
 }

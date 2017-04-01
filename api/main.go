@@ -2,12 +2,24 @@ package main
 
 import (
 	"database/sql/driver"
+	"strconv"
 	"time"
+
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
+// IsInt checkes whether a given string is an integer
+func IsInt(s string) bool {
+	if _, err := strconv.Atoi(s); err == nil {
+		return true
+	}
+	return false
+}
+
+// Cors sets up Cors to allow Cross Origin requests
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
@@ -15,9 +27,15 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
+// InitDb initializes the Database depending on the test environment variable
 func InitDb() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "./data.db")
 	db.LogMode(true)
+	if os.Getenv("TEST") == "1" {
+		db, err = gorm.Open("sqlite3", "./test.db")
+		db.DropTableIfExists(&Achievements{}, &Reviews{}, &Users{}, &Venues{})
+		db.LogMode(false)
+	}
 	if err != nil {
 		panic(err)
 	}
@@ -38,9 +56,60 @@ func InitDb() *gorm.DB {
 		db.CreateTable(&Venues{})
 		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&Venues{})
 	}
+
+	if os.Getenv("TEST") == "1" {
+		var achievement Achievements
+		achievement.ID = 1
+		achievement.Achievement = "Reviewed first Parmy!"
+		db.Create(&achievement)
+		achievement.ID = 2
+		achievement.Achievement = "Ate first Parmy!"
+		db.Create(&achievement)
+
+		var venue Venues
+		venue.ID = 1
+		venue.Address = "30 Willy Wonka Way"
+		venue.VenueName = "Dans House"
+		db.Create(&venue)
+		venue.ID = 2
+		venue.Address = "42 Wallaby Way, Sydney"
+		venue.VenueName = "Dans Old House"
+		db.Create(&venue)
+
+		var user Users
+		user.ID = 1
+		user.FirstName = "Daniel"
+		user.LastName = "Mitchell"
+		user.UserName = "DMitch"
+		user.Email = "d@gmail.com"
+		user.Password = []byte("Daniel")
+		db.Create(&user)
+		user.ID = 2
+		user.FirstName = "Jerry"
+		user.LastName = "Seinfield"
+		user.UserName = "Beemovie4lyf"
+		user.Email = "beemovie@gmail.com"
+		user.Password = []byte("Daniel")
+		db.Create(&user)
+
+		var review Reviews
+		review.ID = 1
+		review.Notes = "It was pretty good"
+		review.UserID = 1
+		review.VenueID = 1
+		review.Rating = 10
+		db.Create(&review)
+		review.ID = 2
+		review.Notes = "Too much water"
+		review.UserID = 1
+		review.VenueID = 1
+		review.Rating = 7.8
+		db.Create(&review)
+	}
 	return db
 }
 
+// NullTime is a model to allow for a nullable time
 type NullTime struct {
 	Time  time.Time `form:"time" json:"time"`
 	Valid bool      `form:"valid" json:"valid"` // Valid is true if Time is not NULL
@@ -60,10 +129,13 @@ func (nt NullTime) Value() (driver.Value, error) {
 	return nt.Time, nil
 }
 
+// SetupRouter sets up the Router to route requests to the functions
 func SetupRouter(release bool, log bool) *gin.Engine {
+	if release == true {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	router := gin.Default()
-	if release == true || log == false {
-		gin.SetMode(gin.ReleaseMode) //For Release
+	if log == false {
 		router = gin.New()
 	}
 	router.Use(Cors())
@@ -113,7 +185,6 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 		achievements.OPTIONS("/", OptionsAchievement)
 		achievements.OPTIONS("/:id", OptionsAchievement)
 	}
-
 	return router
 }
 
