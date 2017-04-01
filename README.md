@@ -21,11 +21,14 @@ BANNED PACKAGES
 
 ## Setup
 
-### Backend
+### Prerequisites
 
 * Install the latest version of [Go](https://golang.org/dl/)
 * Install [Postman](https://www.getpostman.com/)
 * Install gcc ([windows](https://sourceforge.net/projects/mingw-w64/?source=typ_redirect))
+
+### Backend
+
 * Run ` npm install ` to get all the packages required to run the following scripts
 * Run ` npm run build ` or ` npm run dev ` To setup, install and build go packages 
 * The executable will be built in /api/bin/api.exe
@@ -52,5 +55,6 @@ It installs these packages (gocode gopkgs go-outline go-symbols guru gorename go
 - [x] Setup linting
 - [ ] Mockups in Balsamiq
 - [ ] Setup Unit Testing
+- [ ] Setup Dev Server
  
 ![alt text](/img/commit.png?raw=true "Try and beat this commit")
