@@ -74,7 +74,7 @@ func UpdateAchievement(c *gin.Context) {
 			db.Save(&result)
 			c.JSON(200, gin.H{"success": result})
 		} else {
-			c.JSON(422, gin.H{"error": "One or more of the fields are empty"})
+			c.JSON(422, gin.H{"error": "The Achievement field is empty"})
 		}
 
 	} else {
