@@ -20,11 +20,11 @@ DB
 * Install gcc ([windows](https://sourceforge.net/projects/mingw-w64/?source=typ_redirect))
 
 ### Backend
-* Run `cd src && go install` to install go packages
-* The executable will be built in src/api/bin/api.exe
-* Run ` go build ` for subsequent builds 
-(you may need to set your GOPATH and GOBIN system environment variables to /api and api/bin respectively)
-See [here](https://github.com/golang/go/wiki/InstallTroubleshooting) for help with getting Go to work
+
+* NodeJS is used for cross platform enviroment variable management
+* Run `node build.js` to build the Go package
+	* The executable will be built in dist/api.exe
+* Run `node test.js` to run the Go test suite
 * To get go linting and testing to work you may need to install the golang official packages golint and gotests.
 vscode asks to do this for you when you have the Go extension and start editing a Go file.
 It installs these packages (gocode gopkgs go-outline go-symbols guru gorename godef goreturns golint gotests)
