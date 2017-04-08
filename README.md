@@ -1,6 +1,8 @@
 # :poultry_leg: Parmyay :poultry_leg:
 
 An API dedicated to finding and rating the best chicken parmigianas in your local area
+[ParmyayWeb](https://github.com/MrCeleryman/ParmyayWeb)
+[ParmyayMobile](https://github.com/MrCeleryman/ParmyayMobile)
 
 ## Stack
 
@@ -41,5 +43,3 @@ It installs these packages (gocode gopkgs go-outline go-symbols guru gorename go
 - [ ] Mockups in Balsamiq
 - [ ] Setup Unit Testing
 - [ ] Setup Dev Server
- 
-![alt text](/img/commit.png?raw=true "Try and beat this commit")
