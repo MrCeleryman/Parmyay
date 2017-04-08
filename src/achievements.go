@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
+ 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-// Achievements DB Model
+// Achievement DB Model
 type Achievement struct {
 	ID          int    `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	Achievement string `gorm:"not null" form:"achievement" json:"achievement"`
@@ -13,39 +13,30 @@ type Achievement struct {
 
 // PostAchievement Create an Achievement
 func PostAchievement(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	var achievement Achievement
 	c.Bind(&achievement)
 	if IsInt(achievement.Achievement) {
 		c.JSON(400, gin.H{"error": "No Numbers allowed"})
 	} else if achievement.Achievement != "" {
-		db.Create(&achievement)
+		DB.Create(&achievement)
 		c.JSON(201, gin.H{"success": achievement})
 	} else {
 		c.JSON(422, gin.H{"error": "Fields are empty"})
 	}
 }
 
-// GetAchievements Gets all achievements
+// GetAchievement Gets all Achievements
 func GetAchievements(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
-	var achievements []Achievement
-	db.Find(&achievements)
-	c.JSON(200, achievements)
+	var Achievement []Achievement
+	DB.Find(&Achievement)
+	c.JSON(200, Achievement)
 }
 
 // GetAchievement Gets an achievement
 func GetAchievement(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
 	var achievement Achievement
-	db.First(&achievement, id)
+	DB.First(&achievement, id)
 
 	if achievement.ID != 0 {
 		c.JSON(200, achievement)
@@ -54,14 +45,11 @@ func GetAchievement(c *gin.Context) {
 	}
 }
 
-// UpdateAchievement updates an Achievements
+// UpdateAchievement updates an Achievement
 func UpdateAchievement(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
 	var achievement Achievement
-	db.First(&achievement, id)
+	DB.First(&achievement, id)
 
 	if achievement.ID != 0 {
 		var newAchievement Achievement
@@ -71,7 +59,7 @@ func UpdateAchievement(c *gin.Context) {
 				ID:          achievement.ID,
 				Achievement: newAchievement.Achievement,
 			}
-			db.Save(&result)
+			DB.Save(&result)
 			c.JSON(200, gin.H{"success": result})
 		} else {
 			c.JSON(422, gin.H{"error": "The Achievement field is empty"})
@@ -84,15 +72,13 @@ func UpdateAchievement(c *gin.Context) {
 
 // DeleteAchievement deletes an achievement
 func DeleteAchievement(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
 
 	id := c.Params.ByName("id")
 	var achievement Achievement
-	db.First(&achievement, id)
+	DB.First(&achievement, id)
 
 	if achievement.ID != 0 {
-		db.Delete(&achievement)
+		DB.Delete(&achievement)
 		c.Status(204)
 	} else {
 		c.JSON(404, gin.H{"error": "Achievement not found"})
