@@ -10,7 +10,7 @@ import (
 )
 
 // Venues DB Model
-type Venues struct {
+type Venue struct {
 	ID        int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	VenueName string    `gorm:"not null;size:255" form:"venueName" json:"venueName"`
 	Address   string    `gorm:"not null" form:"address" json:"address"`
@@ -27,7 +27,7 @@ func PostVenue(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
-	var venue Venues
+	var venue Venue
 	c.Bind(&venue)
 
 	if venue.VenueName != "" && venue.Address != "" && !math.IsNaN(venue.Latitude) && !math.IsNaN(venue.Longitude) {
@@ -45,7 +45,7 @@ func GetVenues(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
-	var venues []Venues
+	var venues []Venue
 	db.Find(&venues)
 	c.JSON(200, venues)
 }
@@ -56,7 +56,7 @@ func GetVenue(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var venue Venues
+	var venue Venue
 	db.First(&venue, id)
 
 	if venue.ID != 0 {
@@ -72,15 +72,15 @@ func UpdateVenue(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var venue Venues
+	var venue Venue
 	db.First(&venue, id)
 
 	if venue.VenueName != "" && venue.Address != "" && !math.IsNaN(venue.Latitude) && !math.IsNaN(venue.Longitude) {
 		if venue.ID != 0 {
-			var newVenue Venues
+			var newVenue Venue
 			c.Bind(&newVenue)
 
-			result := Venues{
+			result := Venue{
 				ID:        venue.ID,
 				VenueName: newVenue.VenueName,
 				Address:   newVenue.Address,
@@ -106,14 +106,14 @@ func DeleteVenue(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var venue Venues
+	var venue Venue
 	db.First(&venue, id)
 
 	if venue.ID != 0 {
-		var newVenue Venues
+		var newVenue Venue
 		c.Bind(&newVenue)
 
-		result := Venues{
+		result := Venue{
 			ID:      venue.ID,
 			Deleted: NullTime{Time: time.Now(), Valid: true},
 		}

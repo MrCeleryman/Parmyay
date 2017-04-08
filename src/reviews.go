@@ -9,7 +9,7 @@ import (
 )
 
 // Reviews DB Model
-type Reviews struct {
+type Review struct {
 	ID      int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserID  int       `gorm:"index" form:"userId" json:"userId"`
 	VenueID int       `gorm:"index" form:"venueId" json:"venueId"`
@@ -25,7 +25,7 @@ func PostReview(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
-	var review Reviews
+	var review Review
 	c.Bind(&review)
 
 	if review.Rating != 0 && review.Notes != "" && review.UserID != 0 && review.VenueID != 0 {
@@ -58,7 +58,7 @@ func GetReviews(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
-	var reviews []Reviews
+	var reviews []Review
 	db.Find(&reviews)
 	c.JSON(200, reviews)
 }
@@ -69,7 +69,7 @@ func GetReview(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var review Reviews
+	var review Review
 	db.First(&review, id)
 
 	if review.ID != 0 {
@@ -85,15 +85,15 @@ func UpdateReview(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var review Reviews
+	var review Review
 	db.First(&review, id)
 
 	if review.Rating != 0 && review.Notes != "" {
 		if review.ID != 0 {
-			var newReview Reviews
+			var newReview Review
 			c.Bind(&newReview)
 
-			result := Reviews{
+			result := Review{
 				ID:      review.ID,
 				Rating:  newReview.Rating,
 				Notes:   newReview.Notes,
@@ -117,14 +117,14 @@ func DeleteReview(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var review Reviews
+	var review Review
 	db.First(&review, id)
 
 	if review.ID != 0 {
-		var newReview Reviews
+		var newReview Review
 		c.Bind(&newReview)
 
-		result := Reviews{
+		result := Review{
 			ID:      review.ID,
 			ValidTo: NullTime{Time: time.Now(), Valid: true},
 		}

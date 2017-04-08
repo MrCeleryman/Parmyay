@@ -6,7 +6,7 @@ import (
 )
 
 // Achievements DB Model
-type Achievements struct {
+type Achievement struct {
 	ID          int    `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	Achievement string `gorm:"not null" form:"achievement" json:"achievement"`
 }
@@ -16,7 +16,7 @@ func PostAchievement(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
-	var achievement Achievements
+	var achievement Achievement
 	c.Bind(&achievement)
 	if IsInt(achievement.Achievement) {
 		c.JSON(400, gin.H{"error": "No Numbers allowed"})
@@ -33,7 +33,7 @@ func GetAchievements(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
-	var achievements []Achievements
+	var achievements []Achievement
 	db.Find(&achievements)
 	c.JSON(200, achievements)
 }
@@ -44,7 +44,7 @@ func GetAchievement(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var achievement Achievements
+	var achievement Achievement
 	db.First(&achievement, id)
 
 	if achievement.ID != 0 {
@@ -60,14 +60,14 @@ func UpdateAchievement(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var achievement Achievements
+	var achievement Achievement
 	db.First(&achievement, id)
 
 	if achievement.ID != 0 {
-		var newAchievement Achievements
+		var newAchievement Achievement
 		c.Bind(&newAchievement)
 		if newAchievement.Achievement != "" {
-			result := Achievements{
+			result := Achievement{
 				ID:          achievement.ID,
 				Achievement: newAchievement.Achievement,
 			}
@@ -88,7 +88,7 @@ func DeleteAchievement(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var achievement Achievements
+	var achievement Achievement
 	db.First(&achievement, id)
 
 	if achievement.ID != 0 {

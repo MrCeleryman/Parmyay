@@ -10,7 +10,7 @@ import (
 )
 
 // Users DB Model
-type Users struct {
+type User struct {
 	ID           int            `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserName     string         `gorm:"not null;size:64" form:"userName" json:"userName"`
 	Password     []byte         `gorm:"not null" form:"passWord" json:"passWord"`
@@ -29,7 +29,7 @@ func PostUser(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
-	var user Users
+	var user User
 	c.Bind(&user)
 	fmt.Println(user.Password)
 	if user.FirstName != "" && user.LastName != "" && user.UserName != "" && user.Password != nil && user.Email != "" {
@@ -47,7 +47,7 @@ func GetUsers(c *gin.Context) {
 	db := InitDb()
 	defer db.Close()
 
-	var users []Users
+	var users []User
 	db.Find(&users)
 
 	c.JSON(200, users)
@@ -59,7 +59,7 @@ func GetUser(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var user Users
+	var user User
 
 	db.First(&user, id)
 	if user.ID != 0 {
@@ -75,16 +75,16 @@ func UpdateUser(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var user Users
+	var user User
 	db.First(&user, id)
 
 	if user.FirstName != "" && user.LastName != "" && user.UserName != "" &&
 		user.Password != nil && user.Email != "" {
 		if user.ID != 0 {
-			var newUser Users
+			var newUser User
 			c.Bind(&newUser)
 
-			result := Users{
+			result := User{
 				ID:        user.ID,
 				UserName:  newUser.UserName,
 				Password:  newUser.Password,
@@ -111,14 +111,14 @@ func DeleteUser(c *gin.Context) {
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var user Users
+	var user User
 	db.First(&user, id)
 
 	if user.ID != 0 {
-		var newUser Users
+		var newUser User
 		c.Bind(&newUser)
 
-		result := Users{
+		result := User{
 			ID:      user.ID,
 			Deleted: NullTime{Time: time.Now(), Valid: true},
 		}

@@ -39,16 +39,16 @@ func InitDb() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
-	if !db.HasTable(&Achievements{}) {
-		db.CreateTable(&Achievements{})
-		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&Achievements{})
+	if !db.HasTable(&Achievement{}) {
+		db.CreateTable(&Achievement{})
+		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&Achievement{})
 	}
 	if !db.HasTable(&Reviews{}) {
 		db.CreateTable(&Reviews{})
 		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&Reviews{})
 	}
 	if !db.HasTable(&Users{}) {
-		db.Model(&Users{}).Related(&Achievements{}, "Achievements")
+		db.Model(&Users{}).Related(&Achievement{}, "Achievements")
 		db.CreateTable(&Users{})
 		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&Users{})
 	}
@@ -58,7 +58,7 @@ func InitDb() *gorm.DB {
 	}
 
 	if os.Getenv("TEST") == "1" {
-		var achievement Achievements
+		var achievement Achievement
 		achievement.ID = 1
 		achievement.Achievement = "Reviewed first Parmy!"
 		db.Create(&achievement)
@@ -66,7 +66,7 @@ func InitDb() *gorm.DB {
 		achievement.Achievement = "Ate first Parmy!"
 		db.Create(&achievement)
 
-		var venue Venues
+		var venue Venue
 		venue.ID = 1
 		venue.Address = "30 Willy Wonka Way"
 		venue.VenueName = "Dans House"
@@ -76,7 +76,7 @@ func InitDb() *gorm.DB {
 		venue.VenueName = "Dans Old House"
 		db.Create(&venue)
 
-		var user Users
+		var user User
 		user.ID = 1
 		user.FirstName = "Daniel"
 		user.LastName = "Mitchell"
@@ -92,7 +92,7 @@ func InitDb() *gorm.DB {
 		user.Password = []byte("Daniel")
 		db.Create(&user)
 
-		var review Reviews
+		var review Review
 		review.ID = 1
 		review.Notes = "It was pretty good"
 		review.UserID = 1
