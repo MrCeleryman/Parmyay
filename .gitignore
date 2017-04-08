@@ -4,7 +4,7 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
-# Vuejs build result and test
+# API build result and test
 dist/
 
 # Editor Files #
@@ -37,9 +37,8 @@ jspm_packages
 npm-debug.log
 
 # Go
-api/bin
-api/pkg
-api/src
-api/data.db
-api/test.db
-api/api.exe
+src/bin
+src/pkg
+src/src
+src/data.db
+src/test.db
