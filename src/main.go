@@ -32,7 +32,7 @@ func InitDb() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "./data.db")
 	db.LogMode(true)
 	if os.Getenv("TEST") == "1" {
-		db, err = gorm.Open("sqlite3", "./test.db")
+		db, err = gorm.Open("sqlite3", ":memory:")
 		db.DropTableIfExists(&Achievements{}, &Reviews{}, &Users{}, &Venues{})
 		db.LogMode(false)
 	}
