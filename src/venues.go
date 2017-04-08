@@ -10,7 +10,7 @@ import (
 )
 
 // Venues DB Model
-type Venues struct {
+type Venue struct {
 	ID        int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	VenueName string    `gorm:"not null;size:255" form:"venueName" json:"venueName"`
 	Address   string    `gorm:"not null" form:"address" json:"address"`
@@ -19,21 +19,18 @@ type Venues struct {
 	Created   time.Time `gorm:"not null" form:"created" json:"created"`
 	Updated   time.Time `gorm:"not null" form:"updated" json:"updated"`
 	Deleted   NullTime  `form:"deleted" json:"deleted"`
-	Reviews   []Reviews `form:"reviews" json:"reviews"`
+	Reviews   []Review `form:"reviews" json:"reviews"`
 }
 
 // PostVenue creates a Venue
 func PostVenue(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
-	var venue Venues
+	var venue Venue
 	c.Bind(&venue)
 
 	if venue.VenueName != "" && venue.Address != "" && !math.IsNaN(venue.Latitude) && !math.IsNaN(venue.Longitude) {
 		venue.Created = time.Now()
 		venue.Updated = time.Now()
-		db.Create(&venue)
+		DB.Create(&venue)
 		c.JSON(201, gin.H{"success": venue})
 	} else {
 		c.JSON(422, gin.H{"error": "Fields are empty"})
@@ -42,22 +39,16 @@ func PostVenue(c *gin.Context) {
 
 // GetVenues gets all Venues
 func GetVenues(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
-	var venues []Venues
-	db.Find(&venues)
+	var venues []Venue
+	DB.Find(&venues)
 	c.JSON(200, venues)
 }
 
 // GetVenue gets a Venue
 func GetVenue(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var venue Venues
-	db.First(&venue, id)
+	var venue Venue
+	DB.First(&venue, id)
 
 	if venue.ID != 0 {
 		c.JSON(200, venue)
@@ -68,19 +59,16 @@ func GetVenue(c *gin.Context) {
 
 // UpdateVenue updates a Venue
 func UpdateVenue(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var venue Venues
-	db.First(&venue, id)
+	var venue Venue
+	DB.First(&venue, id)
 
 	if venue.VenueName != "" && venue.Address != "" && !math.IsNaN(venue.Latitude) && !math.IsNaN(venue.Longitude) {
 		if venue.ID != 0 {
-			var newVenue Venues
+			var newVenue Venue
 			c.Bind(&newVenue)
 
-			result := Venues{
+			result := Venue{
 				ID:        venue.ID,
 				VenueName: newVenue.VenueName,
 				Address:   newVenue.Address,
@@ -89,7 +77,7 @@ func UpdateVenue(c *gin.Context) {
 				Updated:   time.Now(),
 			}
 
-			db.Save(&result)
+			DB.Save(&result)
 			c.JSON(200, gin.H{"success": result})
 		} else {
 			c.JSON(404, gin.H{"error": "Venue not found"})
@@ -102,23 +90,20 @@ func UpdateVenue(c *gin.Context) {
 
 // DeleteVenue soft deletes a venue by setting the deleted date
 func DeleteVenue(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var venue Venues
-	db.First(&venue, id)
+	var venue Venue
+	DB.First(&venue, id)
 
 	if venue.ID != 0 {
-		var newVenue Venues
+		var newVenue Venue
 		c.Bind(&newVenue)
 
-		result := Venues{
+		result := Venue{
 			ID:      venue.ID,
 			Deleted: NullTime{Time: time.Now(), Valid: true},
 		}
 
-		db.Save(&result)
+		DB.Save(&result)
 		c.JSON(200, gin.H{"success": result})
 	} else {
 		c.JSON(404, gin.H{"error": "Venue #" + id + " not found"})

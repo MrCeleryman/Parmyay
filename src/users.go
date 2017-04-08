@@ -3,14 +3,12 @@ package main
 import (
 	"time"
 
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 // Users DB Model
-type Users struct {
+type User struct {
 	ID           int            `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserName     string         `gorm:"not null;size:64" form:"userName" json:"userName"`
 	Password     []byte         `gorm:"not null" form:"passWord" json:"passWord"`
@@ -20,22 +18,18 @@ type Users struct {
 	Created      time.Time      `gorm:"not null" form:"created" json:"created"`
 	Updated      time.Time      `gorm:"not null" form:"updated" json:"updated"`
 	Deleted      NullTime       `form:"deleted" json:"deleted"`
-	Achievements []Achievements `gorm:"many2many:user_achievements;" form:"achievements" json:"achievements"`
-	Reviews      []Reviews      `form:"reviews" json:"reviews"`
+	Achievements []Achievement `gorm:"many2many:user_achievements;" form:"achievements" json:"achievements"`
+	Reviews      []Review      `form:"reviews" json:"reviews"`
 }
 
 // PostUser creates a User
 func PostUser(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
-	var user Users
+	var user User
 	c.Bind(&user)
-	fmt.Println(user.Password)
 	if user.FirstName != "" && user.LastName != "" && user.UserName != "" && user.Password != nil && user.Email != "" {
 		user.Created = time.Now()
 		user.Updated = time.Now()
-		db.Create(&user)
+		DB.Create(&user)
 		c.JSON(201, gin.H{"success": user})
 	} else {
 		c.JSON(422, gin.H{"error": "Fields are empty"})
@@ -44,24 +38,18 @@ func PostUser(c *gin.Context) {
 
 // GetUsers gets all Users
 func GetUsers(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
-	var users []Users
-	db.Find(&users)
+	var users []User
+	DB.Find(&users)
 
 	c.JSON(200, users)
 }
 
 // GetUser gets a User
 func GetUser(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var user Users
+	var user User
 
-	db.First(&user, id)
+	DB.First(&user, id)
 	if user.ID != 0 {
 		c.JSON(200, user)
 	} else {
@@ -71,20 +59,17 @@ func GetUser(c *gin.Context) {
 
 // UpdateUser updates a User
 func UpdateUser(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var user Users
-	db.First(&user, id)
+	var user User
+	DB.First(&user, id)
 
 	if user.FirstName != "" && user.LastName != "" && user.UserName != "" &&
 		user.Password != nil && user.Email != "" {
 		if user.ID != 0 {
-			var newUser Users
+			var newUser User
 			c.Bind(&newUser)
 
-			result := Users{
+			result := User{
 				ID:        user.ID,
 				UserName:  newUser.UserName,
 				Password:  newUser.Password,
@@ -94,7 +79,7 @@ func UpdateUser(c *gin.Context) {
 				Updated:   time.Now(),
 			}
 
-			db.Save(&result)
+			DB.Save(&result)
 			c.JSON(200, gin.H{"success": result})
 		} else {
 			c.JSON(404, gin.H{"error": "User #" + id + " not found"})
@@ -107,24 +92,17 @@ func UpdateUser(c *gin.Context) {
 
 // DeleteUser soft deletes a user by setting the deleted date
 func DeleteUser(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var user Users
-	db.First(&user, id)
+	var user User
+	DB.First(&user, id)
 
 	if user.ID != 0 {
-		var newUser Users
+		var newUser User = user;
 		c.Bind(&newUser)
+		newUser.Deleted = NullTime{Time: time.Now(), Valid: true}
 
-		result := Users{
-			ID:      user.ID,
-			Deleted: NullTime{Time: time.Now(), Valid: true},
-		}
-
-		db.Save(&result)
-		c.JSON(200, gin.H{"success": result})
+		DB.Save(&newUser)
+		c.JSON(200, gin.H{"success": User{ID: user.ID, Deleted: user.Deleted}})
 	} else {
 		c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 	}

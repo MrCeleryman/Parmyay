@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 )
 
 // PostFunc is a handler function which sends a POST request to the local API
 func PostFunc(t *testing.T, json string, url string, expectedCode int) {
-	os.Setenv("TEST", "1")
 	testRouter := SetupRouter(true, false)
 
 	var jsonByte = []byte(json)
@@ -29,7 +27,6 @@ func PostFunc(t *testing.T, json string, url string, expectedCode int) {
 
 // GetFunc is a handler function which sends a GET request to the local API
 func GetFunc(t *testing.T, url string, expectedCode int) {
-	os.Setenv("TEST", "1")
 	testRouter := SetupRouter(true, false)
 
 	request, err := http.NewRequest("GET", url, nil)
@@ -39,13 +36,12 @@ func GetFunc(t *testing.T, url string, expectedCode int) {
 	response := httptest.NewRecorder()
 	testRouter.ServeHTTP(response, request)
 	if response.Code != expectedCode {
-		t.Errorf("Expected %d", expectedCode)
+		t.Errorf("Expected %d, Got %d", expectedCode, response.Code)
 	}
 }
 
 // DeleteFunc is a handler function which sends a DELETE request to the local API
 func DeleteFunc(t *testing.T, url string, expectedCode int) {
-	os.Setenv("TEST", "1")
 	testRouter := SetupRouter(true, false)
 
 	request, err := http.NewRequest("DELETE", url, nil)
@@ -61,7 +57,6 @@ func DeleteFunc(t *testing.T, url string, expectedCode int) {
 
 // SoftDeleteFunc is a handler function which sends a PATCH request to the local API
 func SoftDeleteFunc(t *testing.T, url string, expectedCode int) {
-	os.Setenv("TEST", "1")
 	testRouter := SetupRouter(true, false)
 
 	request, err := http.NewRequest("PATCH", url, bytes.NewBuffer([]byte("")))
@@ -77,7 +72,6 @@ func SoftDeleteFunc(t *testing.T, url string, expectedCode int) {
 
 // PutFunc is a handler function which sends a PUT request to the local API
 func PutFunc(t *testing.T, json string, url string, expectedCode int) {
-	os.Setenv("TEST", "1")
 	testRouter := SetupRouter(true, false)
 
 	var jsonByte = []byte(json)

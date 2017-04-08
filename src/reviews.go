@@ -9,7 +9,7 @@ import (
 )
 
 // Reviews DB Model
-type Reviews struct {
+type Review struct {
 	ID      int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserID  int       `gorm:"index" form:"userId" json:"userId"`
 	VenueID int       `gorm:"index" form:"venueId" json:"venueId"`
@@ -22,31 +22,28 @@ type Reviews struct {
 
 // PostReview creates a review
 func PostReview(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
-	var review Reviews
+	var review Review
 	c.Bind(&review)
 
 	if review.Rating != 0 && review.Notes != "" && review.UserID != 0 && review.VenueID != 0 {
 
 		userID := review.UserID
 		venueID := review.VenueID
-		var user Users
-		db.First(&user, userID)
+		var user User
+		DB.First(&user, userID)
 		if user.ID == 0 {
 			c.JSON(404, gin.H{"error": "User #" + strconv.Itoa(userID) + " not found"})
 			return
 		}
-		var venue Venues
-		db.First(&venue, venueID)
+		var venue Venue
+		DB.First(&venue, venueID)
 		if venue.ID == 0 {
 			c.JSON(404, gin.H{"error": "Venue #" + strconv.Itoa(venueID) + " not found"})
 			return
 		}
 		review.Created = time.Now()
 		review.Updated = time.Now()
-		db.Create(&review)
+		DB.Create(&review)
 		c.JSON(201, gin.H{"success": review})
 	} else {
 		c.JSON(422, gin.H{"error": "Fields are empty"})
@@ -55,22 +52,16 @@ func PostReview(c *gin.Context) {
 
 // GetReviews gets all reviews
 func GetReviews(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
-	var reviews []Reviews
-	db.Find(&reviews)
+	var reviews []Review
+	DB.Find(&reviews)
 	c.JSON(200, reviews)
 }
 
 // GetReview gets a review
 func GetReview(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var review Reviews
-	db.First(&review, id)
+	var review Review
+	DB.First(&review, id)
 
 	if review.ID != 0 {
 		c.JSON(200, review)
@@ -81,26 +72,23 @@ func GetReview(c *gin.Context) {
 
 // UpdateReview updates a review
 func UpdateReview(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var review Reviews
-	db.First(&review, id)
+	var review Review
+	DB.First(&review, id)
 
 	if review.Rating != 0 && review.Notes != "" {
 		if review.ID != 0 {
-			var newReview Reviews
+			var newReview Review
 			c.Bind(&newReview)
 
-			result := Reviews{
+			result := Review{
 				ID:      review.ID,
 				Rating:  newReview.Rating,
 				Notes:   newReview.Notes,
 				Updated: time.Now(),
 			}
 
-			db.Save(&result)
+			DB.Save(&result)
 			c.JSON(200, gin.H{"success": result})
 		} else {
 			c.JSON(404, gin.H{"error": "Review #" + id + " not found"})
@@ -113,23 +101,20 @@ func UpdateReview(c *gin.Context) {
 
 // DeleteReview soft deletes a review by setting the deleted date
 func DeleteReview(c *gin.Context) {
-	db := InitDb()
-	defer db.Close()
-
 	id := c.Params.ByName("id")
-	var review Reviews
-	db.First(&review, id)
+	var review Review
+	DB.First(&review, id)
 
 	if review.ID != 0 {
-		var newReview Reviews
+		var newReview Review
 		c.Bind(&newReview)
 
-		result := Reviews{
+		result := Review{
 			ID:      review.ID,
 			ValidTo: NullTime{Time: time.Now(), Valid: true},
 		}
 
-		db.Save(&result)
+		DB.Save(&result)
 		c.JSON(200, gin.H{"success": result})
 	} else {
 		c.JSON(404, gin.H{"error": "Review #" + id + " not found"})

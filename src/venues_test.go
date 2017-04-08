@@ -2,8 +2,6 @@ package main
 
 import (
 	"testing"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func TestGetVenues(t *testing.T) {
