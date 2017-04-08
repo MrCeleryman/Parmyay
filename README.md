@@ -41,5 +41,3 @@ It installs these packages (gocode gopkgs go-outline go-symbols guru gorename go
 - [ ] Mockups in Balsamiq
 - [ ] Setup Unit Testing
 - [ ] Setup Dev Server
- 
-![alt text](/img/commit.png?raw=true "Try and beat this commit")
