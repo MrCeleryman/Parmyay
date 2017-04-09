@@ -42,5 +42,7 @@ api/bin
 api/pkg
 # All packages which are not parmyay
 api/src/!parmyay
+api/src/parmyay/coverage
 data.db
 test.db
+api/api.exe

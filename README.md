@@ -36,6 +36,14 @@ vscode asks to do this for you when you have the Go extension and start editing 
 It installs these packages (gocode gopkgs go-outline go-symbols guru gorename godef goreturns golint gotests)
 * Open up Postman and use it to use the api and stuff
 
+## Usage
+
+* `go build` in `api\` builds api and creates api.exe
+* `go get` in `api\` gets packages requires and builds exe in bin/
+* `go test` in `api\src\parmyay` runs unit tests
+* `go test -cover` in `api\src\parmyay` runs unit tests and coverage
+* `go tool cover -html=coverage` in `api\src\parmyay` runs unit tests, coverage and launches web browser to view coverage report
+
 ## Roadmap
 
 - [x] Initial Setup Front End
