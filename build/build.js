@@ -6,7 +6,7 @@ process.env = Object.assign({}, process.env, util.env);
 util.setupStructure();
 
 util.spawnProc("go", ["get"], {
-	cwd: resolve("src"),
+	cwd: resolve("api"),
 	shell: true
 })
 .on("close", exitCode => {
@@ -15,9 +15,9 @@ util.spawnProc("go", ["get"], {
 	}
 
 	util.spawnProc("go", ["build"], {
-		cwd: resolve("src")
+		cwd: resolve("api")
 	}).on("close", exitCode => {
-		let sourcePath = resolve("src", "src.exe");
+		let sourcePath = resolve("api", "api.exe");
 		let source = fs.createReadStream(sourcePath);
 		let dest = fs.createWriteStream(resolve("dist", "api.exe"));
 
