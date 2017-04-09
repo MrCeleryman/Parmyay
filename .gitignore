@@ -41,6 +41,6 @@ cover.out
 api/bin
 api/pkg
 # All packages which are not parmyay
-api/src/^parmyay
+api/src/!parmyay
 data.db
 test.db
