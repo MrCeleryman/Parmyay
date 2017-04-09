@@ -22,9 +22,9 @@ module.exports = {
 	setupStructure: function () {
 		const checkDirs = [
 			resolve('dist'), 
-			resolve("src", "pkg"), 
-			resolve("src", "src"), 
-			resolve("src", "bin")
+			resolve("api", "pkg"), 
+			resolve("api", "src"), 
+			resolve("api", "bin")
 		];
 
 		makeIfNotExist = x => {
@@ -35,7 +35,7 @@ module.exports = {
 		checkDirs.forEach(makeIfNotExist);
 	},
 	env: {
-		GOPATH: resolve("src"),
-		GOBIN: resolve("src", "bin"),
+		GOPATH: resolve("api"),
+		GOBIN: resolve("api", "bin"),
 	}
 }

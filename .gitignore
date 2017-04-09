@@ -37,8 +37,9 @@ jspm_packages
 npm-debug.log
 
 # Go
-src/bin
-src/pkg
-src/src
-src/data.db
-src/test.db
+api/bin
+api/pkg
+# All packages which are not parmyay
+api/src/^parmyay
+data.db
+test.db

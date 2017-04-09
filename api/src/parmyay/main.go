@@ -1,10 +1,11 @@
-package main
+package parmyay
 
 import (
 	"database/sql/driver"
 	"strconv"
 	"time"
     "fmt"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -34,12 +35,10 @@ func Cors() gin.HandlerFunc {
 func InitDb() {
     var err error
     
-    if DB == nil {
-        if DB, err = gorm.Open("sqlite3", "./data.db"); err != nil {
-            panic(fmt.Sprintf("Error when connecting to production DB: err=%+v", err))
-            DB.LogMode(true)
-        }
-    }
+	if DB, err = gorm.Open("sqlite3", os.Getenv("DB_NAME")); err != nil {
+		panic(fmt.Sprintf("Error when connecting to production DB: err=%+v", err))
+		DB.LogMode(true)
+	}
     
 	if !DB.HasTable(&Achievement{}) {
 		DB.CreateTable(&Achievement{})
@@ -135,8 +134,8 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 	return router
 }
 
-func main() {
-    InitDb();
-	router := SetupRouter(false, true)
-	router.Run(":8900")
-}
+//func main() {
+//    InitDb();
+	//router := SetupRouter(false, true)
+	//router.Run(":8900")
+//}
