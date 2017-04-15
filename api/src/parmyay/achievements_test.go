@@ -5,15 +5,21 @@ import (
 )
 
 func TestGetAchievements(t *testing.T) {
-	GetFunc(t, "/api/v1/achievements/", 200)
-}
+	cases := []struct {
+		query        string
+		expectedCode int
+	}{
+		{"/api/v1/achievements/", 200},
+		{"/api/v1/achievements/0", 404},
+		{"/api/v1/achievements/1", 200},
+	}
 
-func TestGetAchievementWithIdZero(t *testing.T) {
-	GetFunc(t, "/api/v1/achievements/0", 404)
-}
-
-func TestGetAchievementWithCorrectId(t *testing.T) {
-	GetFunc(t, "/api/v1/achievements/1", 200)
+	for _, c := range cases {
+		got := GetFunc(t, c.query, c.expectedCode)
+		if got.Code != c.expectedCode {
+			t.Errorf("Expected %d, Got %d", c.expectedCode, got.Code)
+		}
+	}
 }
 
 func TestPostAchievementCorrectModel(t *testing.T) {

@@ -2,7 +2,6 @@ package parmyay
 
 import (
 	"github.com/gin-gonic/gin"
- 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 // Achievement DB Model
@@ -25,7 +24,7 @@ func PostAchievement(c *gin.Context) {
 	}
 }
 
-// GetAchievement Gets all Achievements
+// GetAchievements Gets all Achievements
 func GetAchievements(c *gin.Context) {
 	var Achievement []Achievement
 	DB.Find(&Achievement)
