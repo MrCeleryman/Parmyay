@@ -2,17 +2,18 @@ package parmyay
 
 import (
 	"database/sql/driver"
+	"fmt"
+	"os"
 	"strconv"
 	"time"
-    "fmt"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
 var (
-    DB *gorm.DB
+	// DB global to handle the DB state.
+	DB *gorm.DB
 )
 
 // IsInt checkes whether a given string is an integer
@@ -33,13 +34,13 @@ func Cors() gin.HandlerFunc {
 
 // InitDb initializes the Database
 func InitDb() {
-    var err error
-    
+	var err error
+
 	if DB, err = gorm.Open("sqlite3", os.Getenv("DB_NAME")); err != nil {
 		panic(fmt.Sprintf("Error when connecting to %s: err=%+v", os.Getenv("DB_NAME"), err))
 		DB.LogMode(true)
 	}
-    
+
 	if !DB.HasTable(&Achievement{}) {
 		DB.CreateTable(&Achievement{})
 	}
@@ -136,6 +137,6 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 
 //func main() {
 //    InitDb();
-	//router := SetupRouter(false, true)
-	//router.Run(":8900")
+//router := SetupRouter(false, true)
+//router.Run(":8900")
 //}

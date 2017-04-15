@@ -6,10 +6,9 @@ import (
 	"math"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
 )
 
-// Venues DB Model
+// Venue DB Model
 type Venue struct {
 	ID        int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	VenueName string    `gorm:"not null;size:255" form:"venueName" json:"venueName"`
@@ -19,7 +18,7 @@ type Venue struct {
 	Created   time.Time `gorm:"not null" form:"created" json:"created"`
 	Updated   time.Time `gorm:"not null" form:"updated" json:"updated"`
 	Deleted   NullTime  `form:"deleted" json:"deleted"`
-	Reviews   []Review `form:"reviews" json:"reviews"`
+	Reviews   []Review  `form:"reviews" json:"reviews"`
 }
 
 // PostVenue creates a Venue
