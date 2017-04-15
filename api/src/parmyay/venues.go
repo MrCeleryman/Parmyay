@@ -1,9 +1,8 @@
 package parmyay
 
 import (
-	"time"
-
 	"math"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )

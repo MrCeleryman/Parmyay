@@ -9,10 +9,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+
+	// Register sqlite3 driver for gorm
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var (
-	// DB global to handle the DB state.
+	// DB global to handle the DB connection
 	DB *gorm.DB
 )
 
@@ -38,9 +41,8 @@ func InitDb() {
 
 	if DB, err = gorm.Open("sqlite3", os.Getenv("DB_NAME")); err != nil {
 		panic(fmt.Sprintf("Error when connecting to %s: err=%+v", os.Getenv("DB_NAME"), err))
-		DB.LogMode(true)
 	}
-
+	DB.LogMode(true)
 	if !DB.HasTable(&Achievement{}) {
 		DB.CreateTable(&Achievement{})
 	}
