@@ -7,6 +7,7 @@ import (
 func TestGetAchievements(t *testing.T) {
 	PurgeDB()
 
+	// Test get all when the db is empty
 	GetFunc(t, "/api/v1/achievements/", 200, []Achievement{})
 
 	var ac1 = Achievement{ID: 1, Achievement: "Reviewed first Parmy!"}
@@ -16,8 +17,10 @@ func TestGetAchievements(t *testing.T) {
 	DB.Create(ac2)
 	DB.Create(ac3)
 
+	// Test get all when there are achievements
 	GetFunc(t, "/api/v1/achievements/", 200, []Achievement{ac1, ac2, ac3})
 
+	// Test valid query cases
 	cases := []struct {
 		query        string
 		expectedCode int
@@ -27,12 +30,13 @@ func TestGetAchievements(t *testing.T) {
 		{"/api/v1/achievements/2", 200, ac2},
 		{"/api/v1/achievements/3", 200, ac3},
 	}
-
 	for _, c := range cases {
 		GetFunc(t, c.query, c.expectedCode, c.expected)
 	}
-	GetFunc(t, "/api/v1/achievements/0", 404, ErrorResult{"Achievement #0 not found"})
 
+	// Test not found conditions
+	GetFunc(t, "/api/v1/achievements/0", 404, ErrorResult{"Achievement #0 not found"})
+	GetFunc(t, "/api/v1/achievements/20", 404, ErrorResult{"Achievement #20 not found"})
 }
 
 func TestPostAchievementCorrectModel(t *testing.T) {
