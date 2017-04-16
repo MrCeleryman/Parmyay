@@ -14,6 +14,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// ErrorResult Model for a server error message
+type ErrorResult struct {
+	Error string `json:"error"`
+}
+
 var (
 	// DB global to handle the DB connection
 	DB *gorm.DB

@@ -6,8 +6,8 @@ import (
 
 // Achievement DB Model
 type Achievement struct {
-	ID          int    `gorm:"AUTO_INCREMENT" form:"ID" json:"ID"`
-	Achievement string `gorm:"not null" form:"Achievement" json:"Achievement"`
+	ID          int    `gorm:"AUTO_INCREMENT" form:"ID" json:"id"`
+	Achievement string `gorm:"not null" form:"Achievement" json:"achievement"`
 }
 
 // PostAchievement Create an Achievement

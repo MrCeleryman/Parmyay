@@ -2,10 +2,12 @@ package parmyay
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -36,7 +38,7 @@ func PostFunc(t *testing.T, json string, url string, expectedCode int) {
 }
 
 // GetFunc is a handler function which sends a GET request to the local API
-func GetFunc(t *testing.T, url string, expectedCode int) *httptest.ResponseRecorder {
+func GetFunc(t *testing.T, url string, expectedCode int, expected interface{}) *httptest.ResponseRecorder {
 	testRouter := SetupRouter(true, false)
 
 	request, err := http.NewRequest("GET", url, nil)
@@ -45,6 +47,26 @@ func GetFunc(t *testing.T, url string, expectedCode int) *httptest.ResponseRecor
 	}
 	response := httptest.NewRecorder()
 	testRouter.ServeHTTP(response, request)
+
+	if response.Code != expectedCode {
+		t.Errorf("Expected %d, Got %d", expectedCode, response.Code)
+	}
+	// Pull out expected type
+	var expectedType = reflect.TypeOf(expected)
+
+	// Initialise a new empty struct of the expected type
+	var responsePayload = reflect.Indirect((reflect.New(expectedType))).Interface()
+	var expectedValue = reflect.Indirect((reflect.New(expectedType))).Interface()
+
+	// Unmarshalling puts arrays into maps, so also marhsal the expected
+	// to turn its arrays into maps, and unify the key names (eg ID -> id)
+	encodedExpected, _ := json.Marshal(expected)
+	json.Unmarshal(encodedExpected, &expectedValue)
+	json.Unmarshal(response.Body.Bytes(), &responsePayload)
+
+	if reflect.DeepEqual(expectedValue, responsePayload) == false {
+		t.Errorf("Expected %+v, Got %+v\n", expectedValue, responsePayload)
+	}
 	return response
 }
 
