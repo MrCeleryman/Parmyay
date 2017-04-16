@@ -42,7 +42,7 @@ func InitDb() {
 	if DB, err = gorm.Open("sqlite3", os.Getenv("DB_NAME")); err != nil {
 		panic(fmt.Sprintf("Error when connecting to %s: err=%+v", os.Getenv("DB_NAME"), err))
 	}
-	DB.LogMode(true)
+	DB.LogMode(false)
 	if !DB.HasTable(&Achievement{}) {
 		DB.CreateTable(&Achievement{})
 	}
