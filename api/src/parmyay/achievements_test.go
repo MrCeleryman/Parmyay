@@ -40,9 +40,25 @@ func TestGetAchievements(t *testing.T) {
 }
 
 func TestPostAchievementCorrectModel(t *testing.T) {
-	PostFunc(t, `{"achievement":"Reviewed second parmy"}`, "/api/v1/achievements/", 201)
+	PurgeDB()
+
+	// Test valid query cases
+	cases := []struct {
+		query        string
+		json         []byte
+		expectedCode int
+		expected     SuccessResult
+	}{
+		{"/api/v1/achievements/", []byte(`{"achievement":"Reviewed first Parmy!"}`), 201, SuccessResult{
+			"success": Achievement{1, "Reviewed first Parmy!"},
+		}},
+	}
+	for _, c := range cases {
+		PostFunc(t, c.query, c.json, c.expectedCode, c.expected)
+	}
 }
 
+/*
 func TestPostAchievementIncorrectModel(t *testing.T) {
 	PostFunc(t, `{"description":"Reviewed second parmy"}`, "/api/v1/achievements/", 422)
 }
@@ -74,3 +90,4 @@ func TestDeleteAchievementCorrectId(t *testing.T) {
 func TestDeleteAchievementIncorrectId(t *testing.T) {
 	DeleteFunc(t, "/api/v1/achievements/0", 404)
 }
+*/

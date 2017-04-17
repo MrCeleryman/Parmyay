@@ -19,37 +19,9 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-// Test helper methods
-// PostFunc is a handler function which sends a POST request to the local API
-func PostFunc(t *testing.T, json string, url string, expectedCode int) {
-	testRouter := SetupRouter(true, false)
-
-	var jsonByte = []byte(json)
-	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonByte))
-	request.Header.Set("Content-Type", "application/json")
-	if err != nil {
-		fmt.Println(err)
-	}
-	response := httptest.NewRecorder()
-	testRouter.ServeHTTP(response, request)
-	if response.Code != expectedCode {
-		t.Errorf("Expected %d", expectedCode)
-	}
-}
-
-// GetFunc is a handler function which sends a GET request to the local API
-func GetFunc(t *testing.T, url string, expectedCode int, expected interface{}) *httptest.ResponseRecorder {
-	testRouter := SetupRouter(true, false)
-
-	request, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		fmt.Println(err)
-	}
-	response := httptest.NewRecorder()
-	testRouter.ServeHTTP(response, request)
-
-	if response.Code != expectedCode {
-		t.Errorf("Expected %d, Got %d", expectedCode, response.Code)
+func DoAsserts(t *testing.T, expectedCode int, expected interface{}, serverResponse *httptest.ResponseRecorder) {
+	if serverResponse.Code != expectedCode {
+		t.Errorf("Expected %d, Got %d", expectedCode, serverResponse.Code)
 	}
 	// Pull out expected type
 	var expectedType = reflect.TypeOf(expected)
@@ -62,12 +34,40 @@ func GetFunc(t *testing.T, url string, expectedCode int, expected interface{}) *
 	// to turn its arrays into maps, and unify the key names (eg ID -> id)
 	encodedExpected, _ := json.Marshal(expected)
 	json.Unmarshal(encodedExpected, &expectedValue)
-	json.Unmarshal(response.Body.Bytes(), &responsePayload)
+	json.Unmarshal(serverResponse.Body.Bytes(), &responsePayload)
 
 	if reflect.DeepEqual(expectedValue, responsePayload) == false {
 		t.Errorf("Expected %+v, Got %+v\n", expectedValue, responsePayload)
 	}
-	return response
+}
+
+// Test helper methods
+// PostFunc is a handler function which sends a POST request to the local API
+func PostFunc(t *testing.T, url string, sendPayload []byte, expectedCode int, expected interface{}) {
+	testRouter := SetupRouter(true, false)
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(sendPayload))
+	request.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		fmt.Println(err)
+	}
+	response := httptest.NewRecorder()
+	testRouter.ServeHTTP(response, request)
+
+	DoAsserts(t, expectedCode, expected, response)
+}
+
+// GetFunc is a handler function which sends a GET request to the local API
+func GetFunc(t *testing.T, url string, expectedCode int, expected interface{}) {
+	testRouter := SetupRouter(true, false)
+
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+	response := httptest.NewRecorder()
+	testRouter.ServeHTTP(response, request)
+	DoAsserts(t, expectedCode, expected, response)
 }
 
 // DeleteFunc is a handler function which sends a DELETE request to the local API

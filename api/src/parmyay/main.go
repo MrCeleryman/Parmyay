@@ -19,6 +19,9 @@ type ErrorResult struct {
 	Error string `json:"error"`
 }
 
+// SuccessResult Model for a server success message
+type SuccessResult map[string]interface{}
+
 var (
 	// DB global to handle the DB connection
 	DB *gorm.DB
