@@ -20,29 +20,24 @@ func TestGetAchievements(t *testing.T) {
 	// Test get all when there are achievements
 	GetFunc(t, "/api/v1/achievements/", 200, []Achievement{ac1, ac2, ac3})
 
-	// Test valid query cases
-	cases := []struct {
-		query        string
-		expectedCode int
-		expected     Achievement
-	}{
-		{"/api/v1/achievements/1", 200, ac1},
-		{"/api/v1/achievements/2", 200, ac2},
-		{"/api/v1/achievements/3", 200, ac3},
+	// Test cases
+	cases := []Case{
+		{"/api/v1/achievements/1", []byte(``), 200, ac1},
+		{"/api/v1/achievements/2", []byte(``), 200, ac2},
+		{"/api/v1/achievements/3", []byte(``), 200, ac3},
+
+		{"/api/v1/achievements/0", []byte(``), 404, ErrorResult{"Achievement #0 not found"}},
+		{"/api/v1/achievements/20", []byte(``), 404, ErrorResult{"Achievement #20 not found"}},
 	}
 	for _, c := range cases {
 		GetFunc(t, c.query, c.expectedCode, c.expected)
 	}
-
-	// Test not found conditions
-	GetFunc(t, "/api/v1/achievements/0", 404, ErrorResult{"Achievement #0 not found"})
-	GetFunc(t, "/api/v1/achievements/20", 404, ErrorResult{"Achievement #20 not found"})
 }
 
 func TestPostAchievement(t *testing.T) {
 	PurgeDB()
 
-	// Test invalid query cases
+	// Test cases
 	cases := []Case{
 		{"/api/v1/achievements/", []byte(`{"id": -1, "achievement":"Reviewed first Parmy!"}`), 400, ErrorResult{"ID must not be set"}},
 		{"/api/v1/achievements/", []byte(`{"id": 1, "achievement":"Reviewed first Parmy!"}`), 400, ErrorResult{"ID must not be set"}},
@@ -71,12 +66,10 @@ func TestPutAchievement(t *testing.T) {
 	// Create test data
 	var ac1 = Achievement{ID: 1, Achievement: "Reviewed first Parmy!"}
 	var ac2 = Achievement{ID: 2, Achievement: "Ate first Parmy!"}
-	var ac3 = Achievement{ID: 3, Achievement: "Ate first Parmy!"}
 	DB.Create(ac1)
 	DB.Create(ac2)
-	DB.Create(ac3)
 
-	// Test invalid cases
+	// Test cases
 	cases := []Case{
 		{"/api/v1/achievements/0", []byte(`{"achievement":"Updated Achievement"}`), 404, ErrorResult{"Achievement not found"}},
 		{"/api/v1/achievements/0", []byte(``), 404, ErrorResult{"Achievement not found"}},
@@ -108,7 +101,7 @@ func TestDeleteAchievement(t *testing.T) {
 	DB.Create(ac2)
 	DB.Create(ac3)
 
-	// Test invalid cases
+	// Test cases
 	cases := []Case{
 		{"/api/v1/achievements/0", []byte(``), 404, ErrorResult{"Achievement not found"}},
 		{"/api/v1/achievements/9", []byte(``), 404, ErrorResult{"Achievement not found"}},
