@@ -11,6 +11,13 @@ import (
 	"testing"
 )
 
+type Case struct {
+	query        string
+	json         []byte
+	expectedCode int
+	expected     interface{}
+}
+
 func TestMain(m *testing.M) {
 	os.Setenv("DB_NAME", ":memory:")
 	InitDb()
@@ -71,7 +78,7 @@ func GetFunc(t *testing.T, url string, expectedCode int, expected interface{}) {
 }
 
 // DeleteFunc is a handler function which sends a DELETE request to the local API
-func DeleteFunc(t *testing.T, url string, expectedCode int) {
+func DeleteFunc(t *testing.T, url string, expectedCode int, expected interface{}) {
 	testRouter := SetupRouter(true, false)
 
 	request, err := http.NewRequest("DELETE", url, nil)
@@ -80,9 +87,7 @@ func DeleteFunc(t *testing.T, url string, expectedCode int) {
 	}
 	response := httptest.NewRecorder()
 	testRouter.ServeHTTP(response, request)
-	if response.Code != expectedCode {
-		t.Errorf("Expected %d", expectedCode)
-	}
+	DoAsserts(t, expectedCode, expected, response)
 }
 
 // SoftDeleteFunc is a handler function which sends a PATCH request to the local API
@@ -101,20 +106,18 @@ func SoftDeleteFunc(t *testing.T, url string, expectedCode int) {
 }
 
 // PutFunc is a handler function which sends a PUT request to the local API
-func PutFunc(t *testing.T, json string, url string, expectedCode int) {
+func PutFunc(t *testing.T, url string, sendPayload []byte, expectedCode int, expected interface{}) {
 	testRouter := SetupRouter(true, false)
 
-	var jsonByte = []byte(json)
-	request, err := http.NewRequest("PUT", url, bytes.NewBuffer(jsonByte))
+	request, err := http.NewRequest("PUT", url, bytes.NewBuffer(sendPayload))
 	request.Header.Set("Content-Type", "application/json")
 	if err != nil {
 		fmt.Println(err)
 	}
 	response := httptest.NewRecorder()
 	testRouter.ServeHTTP(response, request)
-	if response.Code != expectedCode {
-		t.Errorf("Expected %d", expectedCode)
-	}
+
+	DoAsserts(t, expectedCode, expected, response)
 }
 
 func PurgeDB() {
