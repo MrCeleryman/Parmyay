@@ -42,35 +42,46 @@ func TestGetAchievements(t *testing.T) {
 func TestPostAchievementCorrectModel(t *testing.T) {
 	PurgeDB()
 
+	// Test invalid query cases
+	failCases := []struct {
+		query        string
+		json         []byte
+		expectedCode int
+		expected     ErrorResult
+	}{
+		{"/api/v1/achievements/", []byte(`{"id": -1, "achievement":"Reviewed first Parmy!"}`), 400, ErrorResult{"ID must not be set"}},
+		{"/api/v1/achievements/", []byte(`{"id": 1, "achievement":"Reviewed first Parmy!"}`), 400, ErrorResult{"ID must not be set"}},
+		{"/api/v1/achievements/", []byte(`{"achievement":"5"}`), 400, ErrorResult{"Achievement cannot be a number"}},
+		{"/api/v1/achievements/", []byte(`{"description":"Mad dog"}`), 422, ErrorResult{"Fields are empty"}},
+		{"/api/v1/achievements/", []byte(`{}`), 422, ErrorResult{"Fields are empty"}},
+	}
+	for _, c := range failCases {
+		PostFunc(t, c.query, c.json, c.expectedCode, c.expected)
+	}
+
 	// Test valid query cases
-	cases := []struct {
+	validCases := []struct {
 		query        string
 		json         []byte
 		expectedCode int
 		expected     SuccessResult
 	}{
-		{"/api/v1/achievements/", []byte(`{"achievement":"Reviewed first Parmy!"}`), 201, SuccessResult{
+		{"/api/v1/achievements/", []byte(`{"id": 0, "achievement":"Reviewed first Parmy!"}`), 201, SuccessResult{
 			"success": Achievement{1, "Reviewed first Parmy!"},
 		}},
+		{"/api/v1/achievements/", []byte(`{"achievement":"Reviewed second Parmy!"}`), 201, SuccessResult{
+			"success": Achievement{2, "Reviewed second Parmy!"},
+		}},
+		{"/api/v1/achievements/", []byte(`{"achievement":"Reviewed first Parmy!"}`), 201, SuccessResult{
+			"success": Achievement{3, "Reviewed first Parmy!"},
+		}},
 	}
-	for _, c := range cases {
+	for _, c := range validCases {
 		PostFunc(t, c.query, c.json, c.expectedCode, c.expected)
 	}
 }
 
 /*
-func TestPostAchievementIncorrectModel(t *testing.T) {
-	PostFunc(t, `{"description":"Reviewed second parmy"}`, "/api/v1/achievements/", 422)
-}
-
-func TestPostAchievementBadRequest(t *testing.T) {
-	PostFunc(t, `{"achievement":1}`, "/api/v1/achievements/", 400)
-}
-
-func TestPostAchievementNoNumbers(t *testing.T) {
-	PostFunc(t, `{"achievement":"1"}`, "/api/v1/achievements/", 400)
-}
-
 func TestUpdateAchievementCorrectId(t *testing.T) {
 	PutFunc(t, `{"achievement":"Updated Achievement"}`, "/api/v1/achievements/2", 200)
 }

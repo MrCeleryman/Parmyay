@@ -14,8 +14,10 @@ type Achievement struct {
 func PostAchievement(c *gin.Context) {
 	var achievement Achievement
 	c.Bind(&achievement)
-	if IsInt(achievement.Achievement) {
-		c.JSON(400, gin.H{"error": "No Numbers allowed"})
+	if achievement.ID != 0 {
+		c.JSON(400, gin.H{"error": "ID must not be set"})
+	} else if IsInt(achievement.Achievement) {
+		c.JSON(400, gin.H{"error": "Achievement cannot be a number"})
 	} else if achievement.Achievement != "" {
 		DB.Create(&achievement)
 		c.JSON(201, gin.H{"success": achievement})
