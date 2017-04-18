@@ -27,6 +27,8 @@ var (
 	DB *gorm.DB
 )
 
+var getNow = time.Now
+
 // IsInt checkes whether a given string is an integer
 func IsInt(s string) bool {
 	if _, err := strconv.Atoi(s); err == nil {

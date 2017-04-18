@@ -10,7 +10,7 @@ import (
 type User struct {
 	ID           int           `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserName     string        `gorm:"not null;size:64" form:"userName" json:"userName"`
-	Password     []byte        `gorm:"not null" form:"passWord" json:"passWord"`
+	Password     string        `gorm:"not null" form:"password" json:"password"`
 	Email        string        `gorm:"not null;size:255" form:"email" json:"email"`
 	FirstName    string        `gorm:"not null;size:64" form:"firstName" json:"firstName"`
 	LastName     string        `gorm:"not null;size:64" form:"lastName" json:"lastName"`
@@ -25,9 +25,10 @@ type User struct {
 func PostUser(c *gin.Context) {
 	var user User
 	c.Bind(&user)
-	if user.FirstName != "" && user.LastName != "" && user.UserName != "" && user.Password != nil && user.Email != "" {
-		user.Created = time.Now()
-		user.Updated = time.Now()
+
+	if user.ID == 0 && user.FirstName != "" && user.LastName != "" && user.UserName != "" && user.Password != "" && user.Email != "" {
+		user.Created = getNow()
+		user.Updated = getNow()
 		DB.Create(&user)
 		c.JSON(201, gin.H{"success": user})
 	} else {
@@ -63,7 +64,7 @@ func UpdateUser(c *gin.Context) {
 	DB.First(&user, id)
 
 	if user.FirstName != "" && user.LastName != "" && user.UserName != "" &&
-		user.Password != nil && user.Email != "" {
+		user.Password != "" && user.Email != "" {
 		if user.ID != 0 {
 			var newUser User
 			c.Bind(&newUser)

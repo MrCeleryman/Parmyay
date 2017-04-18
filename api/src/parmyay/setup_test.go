@@ -9,6 +9,7 @@ import (
 	"os"
 	"reflect"
 	"testing"
+	"time"
 )
 
 type Case struct {
@@ -23,6 +24,10 @@ func TestMain(m *testing.M) {
 	InitDb()
 	DB.LogMode(false)
 
+	staticTime := time.Now()
+	getNow = func() time.Time {
+		return staticTime
+	}
 	os.Exit(m.Run())
 }
 
@@ -128,8 +133,5 @@ func PurgeDB() {
 
 	DB.Create(Review{ID: 1, Notes: "It was prety good", UserID: 1, VenueID: 1, Rating: 10})
 	DB.Create(Review{ID: 2, Notes: "Too much water", UserID: 1, VenueID: 1, Rating: 7.8})
-
-	DB.Create(User{ID: 1, FirstName: "Daniel", LastName: "Mitchell", UserName: "DMitch", Email: "d@gmail.com", Password: []byte("Daniel")})
-	DB.Create(User{ID: 2, FirstName: "Jerry", LastName: "Seinfeld", UserName: "DarkLordDD", Email: "bee@movie.com", Password: []byte("dfdfgdfgdfg")})
 
 }
