@@ -26,7 +26,12 @@ func PostUser(c *gin.Context) {
 	var user User
 	c.Bind(&user)
 
-	if user.ID == 0 && user.FirstName != "" && user.LastName != "" && user.UserName != "" && user.Password != "" && user.Email != "" {
+	var existingUser User
+	DB.Where(&User{UserName: user.UserName}).First(&existingUser)
+
+	if existingUser.UserName != "" {
+		c.JSON(422, gin.H{"error": "User already exists"})
+	} else if user.ID == 0 && user.FirstName != "" && user.LastName != "" && user.UserName != "" && user.Password != "" && user.Email != "" {
 		user.Created = getNow()
 		user.Updated = getNow()
 		DB.Create(&user)
@@ -60,33 +65,28 @@ func GetUser(c *gin.Context) {
 // UpdateUser updates a User
 func UpdateUser(c *gin.Context) {
 	id := c.Params.ByName("id")
-	var user User
-	DB.First(&user, id)
+	var existingUser User
+	DB.First(&existingUser, id)
 
-	if user.FirstName != "" && user.LastName != "" && user.UserName != "" &&
-		user.Password != "" && user.Email != "" {
-		if user.ID != 0 {
-			var newUser User
-			c.Bind(&newUser)
+	var newUser User
+	c.Bind(&newUser)
 
-			result := User{
-				ID:        user.ID,
-				UserName:  newUser.UserName,
-				Password:  newUser.Password,
-				Email:     newUser.Email,
-				FirstName: newUser.FirstName,
-				LastName:  newUser.LastName,
-				Updated:   time.Now(),
-			}
+	if newUser.FirstName != "" && newUser.LastName != "" && newUser.UserName != "" &&
+		newUser.Password != "" && newUser.Email != "" {
+		if existingUser.ID != 0 {
+			// Ensure naughty fields are not updated
+			newUser.Updated = getNow()
+			newUser.ID = existingUser.ID
+			newUser.Created = existingUser.Created
+			newUser.Deleted = existingUser.Deleted
+			DB.Model(&existingUser).Updates(newUser)
 
-			DB.Save(&result)
-			c.JSON(200, gin.H{"success": result})
+			c.JSON(200, gin.H{"success": newUser})
 		} else {
 			c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 		}
-
 	} else {
-		c.JSON(422, gin.H{"error": "One or more of the fields are empty"})
+		c.JSON(422, gin.H{"error": "Fields are empty"})
 	}
 }
 
@@ -99,10 +99,10 @@ func DeleteUser(c *gin.Context) {
 	if user.ID != 0 {
 		var newUser = user
 		c.Bind(&newUser)
-		newUser.Deleted = NullTime{Time: time.Now(), Valid: true}
+		newUser.Deleted = NullTime{Time: getNow(), Valid: true}
 
 		DB.Save(&newUser)
-		c.JSON(200, gin.H{"success": User{ID: user.ID, Deleted: user.Deleted}})
+		c.JSON(200, gin.H{"success": newUser})
 	} else {
 		c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 	}

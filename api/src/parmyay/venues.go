@@ -95,14 +95,10 @@ func DeleteVenue(c *gin.Context) {
 	if venue.ID != 0 {
 		var newVenue Venue
 		c.Bind(&newVenue)
+		venue.Deleted = NullTime{Time: getNow(), Valid: true}
 
-		result := Venue{
-			ID:      venue.ID,
-			Deleted: NullTime{Time: time.Now(), Valid: true},
-		}
-
-		DB.Save(&result)
-		c.JSON(200, gin.H{"success": result})
+		DB.Save(&venue)
+		c.JSON(200, gin.H{"success": venue})
 	} else {
 		c.JSON(404, gin.H{"error": "Venue #" + id + " not found"})
 	}

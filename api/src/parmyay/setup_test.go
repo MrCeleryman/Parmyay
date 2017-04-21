@@ -96,7 +96,7 @@ func DeleteFunc(t *testing.T, url string, expectedCode int, expected interface{}
 }
 
 // SoftDeleteFunc is a handler function which sends a PATCH request to the local API
-func SoftDeleteFunc(t *testing.T, url string, expectedCode int) {
+func SoftDeleteFunc(t *testing.T, url string, sendPayload []byte, expectedCode int, expected interface{}) {
 	testRouter := SetupRouter(true, false)
 
 	request, err := http.NewRequest("PATCH", url, bytes.NewBuffer([]byte("")))
@@ -105,9 +105,7 @@ func SoftDeleteFunc(t *testing.T, url string, expectedCode int) {
 	}
 	response := httptest.NewRecorder()
 	testRouter.ServeHTTP(response, request)
-	if response.Code != expectedCode {
-		t.Errorf("Expected %d", expectedCode)
-	}
+	DoAsserts(t, expectedCode, expected, response)
 }
 
 // PutFunc is a handler function which sends a PUT request to the local API
@@ -128,8 +126,8 @@ func PutFunc(t *testing.T, url string, sendPayload []byte, expectedCode int, exp
 func PurgeDB() {
 	DB.Close()
 	InitDb()
-	DB.Create(Venue{ID: 1, Address: "30 Willy Wonka Way", VenueName: "Dans House"})
-	DB.Create(Venue{ID: 2, Address: "42 Wallaby Way, Sydney", VenueName: "Dans Old House"})
+	//DB.Create(Venue{ID: 1, Address: "30 Willy Wonka Way", VenueName: "Dans House"})
+	//DB.Create(Venue{ID: 2, Address: "42 Wallaby Way, Sydney", VenueName: "Dans Old House"})
 
 	DB.Create(Review{ID: 1, Notes: "It was prety good", UserID: 1, VenueID: 1, Rating: 10})
 	DB.Create(Review{ID: 2, Notes: "Too much water", UserID: 1, VenueID: 1, Rating: 7.8})
