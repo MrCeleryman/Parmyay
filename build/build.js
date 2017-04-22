@@ -19,6 +19,10 @@ util.spawnProc("go", ["get"], {
 	}).on("close", exitCode => {
 		let sourcePath = resolve("api", "api.exe");
 		let source = fs.createReadStream(sourcePath);
+		if (!fs.existsSync(resolve("dist"))){
+    		fs.mkdirSync(resolve("dist"));
+		}
+		
 		let dest = fs.createWriteStream(resolve("dist", "api.exe"));
 
 		source.pipe(dest);

@@ -2,21 +2,22 @@ package parmyay
 
 import (
 	"github.com/gin-gonic/gin"
- 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 // Achievement DB Model
 type Achievement struct {
-	ID          int    `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
-	Achievement string `gorm:"not null" form:"achievement" json:"achievement"`
+	ID          int    `gorm:"AUTO_INCREMENT" form:"ID" json:"id"`
+	Achievement string `gorm:"not null" form:"Achievement" json:"achievement"`
 }
 
 // PostAchievement Create an Achievement
 func PostAchievement(c *gin.Context) {
 	var achievement Achievement
 	c.Bind(&achievement)
-	if IsInt(achievement.Achievement) {
-		c.JSON(400, gin.H{"error": "No Numbers allowed"})
+	if achievement.ID != 0 {
+		c.JSON(400, gin.H{"error": "ID must not be set"})
+	} else if IsInt(achievement.Achievement) {
+		c.JSON(400, gin.H{"error": "Achievement cannot be a number"})
 	} else if achievement.Achievement != "" {
 		DB.Create(&achievement)
 		c.JSON(201, gin.H{"success": achievement})
@@ -25,7 +26,7 @@ func PostAchievement(c *gin.Context) {
 	}
 }
 
-// GetAchievement Gets all Achievements
+// GetAchievements Gets all Achievements
 func GetAchievements(c *gin.Context) {
 	var Achievement []Achievement
 	DB.Find(&Achievement)

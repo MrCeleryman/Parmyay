@@ -5,10 +5,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
 )
 
-// Reviews DB Model
+// Review DB Model
 type Review struct {
 	ID      int       `gorm:"AUTO_INCREMENT" form:"id" json:"id"`
 	UserID  int       `gorm:"index" form:"userId" json:"userId"`

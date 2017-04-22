@@ -19,7 +19,7 @@ DB
 
 * Install the latest version of [Go](https://golang.org/dl/)
 * Set the following System Environment Variables
-	* `GOROOT = INSTALL LOCATION/bin`
+	* `GOROOT = INSTALL LOCATION`
 	* `GOPATH = Parmyay/api`
 	* `GOBIN = Parmyay/api/bin`
 * Install [Postman](https://www.getpostman.com/)
