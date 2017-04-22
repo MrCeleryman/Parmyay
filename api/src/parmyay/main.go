@@ -146,9 +146,3 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 	}
 	return router
 }
-
-//func main() {
-//    InitDb();
-//router := SetupRouter(false, true)
-//router.Run(":8900")
-//}
