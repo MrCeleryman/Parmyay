@@ -113,10 +113,3 @@ func DeleteUser(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 	}
 }
-
-// OptionsUser allows DELETE, POST and PUT to come through
-func OptionsUser(c *gin.Context) {
-	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	c.Next()
-}

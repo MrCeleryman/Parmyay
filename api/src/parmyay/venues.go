@@ -110,10 +110,3 @@ func DeleteVenue(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "Venue #" + id + " not found"})
 	}
 }
-
-// OptionsVenue allows DELETE, POST and PUT to come through
-func OptionsVenue(c *gin.Context) {
-	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	c.Next()
-}

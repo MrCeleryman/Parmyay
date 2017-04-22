@@ -116,10 +116,3 @@ func DeleteReview(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "Review #" + id + " not found"})
 	}
 }
-
-// OptionsReview allows DELETE, POST and PUT to come through
-func OptionsReview(c *gin.Context) {
-	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	c.Next()
-}

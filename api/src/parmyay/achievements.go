@@ -85,10 +85,3 @@ func DeleteAchievement(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "Achievement not found"})
 	}
 }
-
-// OptionsAchievement allows DELETE, POST and PUT to come through
-func OptionsAchievement(c *gin.Context) {
-	c.Writer.Header().Set("Access-Control-Allow-Methods", "DELETE,POST, PUT")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	c.Next()
-}
