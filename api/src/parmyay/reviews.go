@@ -24,7 +24,7 @@ func PostReview(c *gin.Context) {
 	var review Review
 	c.Bind(&review)
 
-	if review.Rating != 0 && review.Notes != "" && review.UserID != 0 && review.VenueID != 0 {
+	if review.Notes != "" && review.UserID != 0 && review.VenueID != 0 {
 
 		userID := review.UserID
 		venueID := review.VenueID
@@ -40,12 +40,12 @@ func PostReview(c *gin.Context) {
 			c.JSON(404, gin.H{"error": "Venue #" + strconv.Itoa(venueID) + " not found"})
 			return
 		}
-		review.Created = time.Now()
-		review.Updated = time.Now()
+		review.Created = getNow()
+		review.Updated = getNow()
 		DB.Create(&review)
 		c.JSON(201, gin.H{"success": review})
 	} else {
-		c.JSON(422, gin.H{"error": "Fields are empty"})
+		c.JSON(422, gin.H{"error": "Fields are empty or UserID/VenueID are 0"})
 	}
 }
 
@@ -72,29 +72,30 @@ func GetReview(c *gin.Context) {
 // UpdateReview updates a review
 func UpdateReview(c *gin.Context) {
 	id := c.Params.ByName("id")
-	var review Review
-	DB.First(&review, id)
+	var existingReview Review
+	DB.First(&existingReview, id)
 
-	if review.Rating != 0 && review.Notes != "" {
-		if review.ID != 0 {
-			var newReview Review
-			c.Bind(&newReview)
+	var newReview Review
+	c.Bind(&newReview)
 
-			result := Review{
-				ID:      review.ID,
-				Rating:  newReview.Rating,
-				Notes:   newReview.Notes,
-				Updated: time.Now(),
-			}
+	if newReview.Notes != "" {
+		if existingReview.ID != 0 {
+			newReview.Updated = getNow()
+			newReview.ID = existingReview.ID
+			newReview.ValidTo = existingReview.ValidTo
+			newReview.Created = existingReview.Created
+			newReview.VenueID = existingReview.VenueID
+			newReview.UserID = existingReview.UserID
 
-			DB.Save(&result)
-			c.JSON(200, gin.H{"success": result})
+			DB.Model(&existingReview).Updates(newReview)
+
+			c.JSON(200, gin.H{"success": newReview})
 		} else {
 			c.JSON(404, gin.H{"error": "Review #" + id + " not found"})
 		}
 
 	} else {
-		c.JSON(422, gin.H{"error": "One or more of the fields are empty"})
+		c.JSON(422, gin.H{"error": "Notes are empty"})
 	}
 }
 
@@ -105,16 +106,12 @@ func DeleteReview(c *gin.Context) {
 	DB.First(&review, id)
 
 	if review.ID != 0 {
-		var newReview Review
+		var newReview = review
 		c.Bind(&newReview)
+		newReview.ValidTo = NullTime{Time: getNow(), Valid: true}
 
-		result := Review{
-			ID:      review.ID,
-			ValidTo: NullTime{Time: time.Now(), Valid: true},
-		}
-
-		DB.Save(&result)
-		c.JSON(200, gin.H{"success": result})
+		DB.Save(&newReview)
+		c.JSON(200, gin.H{"success": newReview})
 	} else {
 		c.JSON(404, gin.H{"error": "Review #" + id + " not found"})
 	}
