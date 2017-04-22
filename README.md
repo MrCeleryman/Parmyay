@@ -40,11 +40,9 @@ It installs these packages (gocode gopkgs go-outline go-symbols guru gorename go
 
 ## Usage
 
-* `go build` in `api\` builds api and creates api.exe
-* `go get` in `api\` gets packages requires and builds exe in bin/
-* `go test` in `api\src\parmyay` runs unit tests
-* `go test -cover` in `api\src\parmyay` runs unit tests and coverage
-* `go tool cover -html=coverage` in `api\src\parmyay` runs unit tests, coverage and launches web browser to view coverage report
+* `node build\build.js` in root folder restores packages and build api into `dist/api.exe`
+* Run `api.exe` and api will run on port 8900
+* `node build\test.js` in root folder runs tests and coverage and outputs to html coverage in browser
 
 ## Roadmap
 
@@ -53,4 +51,5 @@ It installs these packages (gocode gopkgs go-outline go-symbols guru gorename go
 - [x] DB Schema
 - [x] Setup linting
 - [x] Setup Unit Testing
-- [ ] Setup Dev Server
+- [x] Code Coverage Setup
+- [ ] Code Coverage 100% currently at 98.8% 
