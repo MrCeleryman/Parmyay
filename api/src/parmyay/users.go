@@ -74,6 +74,12 @@ func UpdateUser(c *gin.Context) {
 	if newUser.FirstName != "" && newUser.LastName != "" && newUser.UserName != "" &&
 		newUser.Password != "" && newUser.Email != "" {
 		if existingUser.ID != 0 {
+			var checkOtherUser User
+			DB.Where(&User{UserName: newUser.UserName}).First(&checkOtherUser)
+			if checkOtherUser.UserName != "" && checkOtherUser.UserName != existingUser.UserName {
+				c.JSON(422, gin.H{"error": "User already exists"})
+				return
+			}
 			// Ensure naughty fields are not updated
 			newUser.Updated = getNow()
 			newUser.ID = existingUser.ID
