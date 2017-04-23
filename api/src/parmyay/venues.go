@@ -1,7 +1,6 @@
 package parmyay
 
 import (
-	"math"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -25,9 +24,14 @@ func PostVenue(c *gin.Context) {
 	var venue Venue
 	c.Bind(&venue)
 
-	if venue.VenueName != "" && venue.Address != "" && !math.IsNaN(venue.Latitude) && !math.IsNaN(venue.Longitude) {
-		venue.Created = time.Now()
-		venue.Updated = time.Now()
+	var existingVenue Venue
+	DB.Where(&Venue{Address: venue.Address}).First(&existingVenue)
+
+	if existingVenue.Address != "" {
+		c.JSON(422, gin.H{"error": "Venue already exists"})
+	} else if venue.ID == 0 && venue.VenueName != "" && venue.Address != "" && venue.Latitude != 0 && venue.Longitude != 0 {
+		venue.Created = getNow()
+		venue.Updated = getNow()
 		DB.Create(&venue)
 		c.JSON(201, gin.H{"success": venue})
 	} else {
@@ -58,27 +62,30 @@ func GetVenue(c *gin.Context) {
 // UpdateVenue updates a Venue
 func UpdateVenue(c *gin.Context) {
 	id := c.Params.ByName("id")
-	var venue Venue
-	DB.First(&venue, id)
+	var existingVenue Venue
+	DB.First(&existingVenue, id)
 
-	if venue.VenueName != "" && venue.Address != "" && !math.IsNaN(venue.Latitude) && !math.IsNaN(venue.Longitude) {
-		if venue.ID != 0 {
-			var newVenue Venue
-			c.Bind(&newVenue)
+	var newVenue Venue
+	c.Bind(&newVenue)
 
-			result := Venue{
-				ID:        venue.ID,
-				VenueName: newVenue.VenueName,
-				Address:   newVenue.Address,
-				Latitude:  newVenue.Latitude,
-				Longitude: newVenue.Longitude,
-				Updated:   time.Now(),
+	if newVenue.VenueName != "" && newVenue.Address != "" && newVenue.Latitude != 0 && newVenue.Longitude != 0 {
+		if existingVenue.ID != 0 {
+			var checkOtherVenue Venue
+			DB.Where(&Venue{Address: newVenue.Address}).First(&checkOtherVenue)
+			if checkOtherVenue.Address != "" && checkOtherVenue.Address != existingVenue.Address {
+				c.JSON(422, gin.H{"error": "Venue already exists"})
+				return
 			}
 
-			DB.Save(&result)
-			c.JSON(200, gin.H{"success": result})
+			newVenue.Updated = getNow()
+			newVenue.ID = existingVenue.ID
+			newVenue.Created = existingVenue.Created
+			newVenue.Deleted = existingVenue.Deleted
+			DB.Model(&existingVenue).Updates(newVenue)
+
+			c.JSON(200, gin.H{"success": newVenue})
 		} else {
-			c.JSON(404, gin.H{"error": "Venue not found"})
+			c.JSON(404, gin.H{"error": "Venue #" + id + " not found"})
 		}
 
 	} else {
@@ -102,11 +109,4 @@ func DeleteVenue(c *gin.Context) {
 	} else {
 		c.JSON(404, gin.H{"error": "Venue #" + id + " not found"})
 	}
-}
-
-// OptionsVenue allows DELETE, POST and PUT to come through
-func OptionsVenue(c *gin.Context) {
-	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	c.Next()
 }

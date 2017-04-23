@@ -61,12 +61,12 @@ func TestUpdateUser(t *testing.T) {
 		{"/api/v1/users/1", []byte(`{"lastName": "Mitchell", "userName": "DMitch", "email": "d@gmail.com", "password": "Daniel"}`), 422, ErrorResult{"Fields are empty"}},
 		{"/api/v1/users/0", []byte(`{"firstName": "Daniel", "lastName": "Mitchell", "userName": "DMitch", "email": "d@gmail.com", "password": "Daniel"}`), 404, ErrorResult{"User #0 not found"}},
 		{"/api/v1/users/9", []byte(`{"firstName": "Daniel", "lastName": "Mitchell", "userName": "DMitch", "email": "d@gmail.com", "password": "Daniel"}`), 404, ErrorResult{"User #9 not found"}},
-
+		{"/api/v1/users/1", []byte(`{"firstName": "Nich", "lastName": "Mitchell", "userName": "DarkLordDD", "email": "d@gmail.com", "password": "Daniel"}`), 422, ErrorResult{"User already exists"}},
 		{"/api/v1/users/1", []byte(`{"firstName": "Nich", "lastName": "Guy", "userName": "nn", "email": "nnn@gmail.com", "password": "nichnich"}`), 200, SuccessResult{
 			"success": User{ID: 1, FirstName: "Nich", LastName: "Guy", UserName: "nn", Email: "nnn@gmail.com", Password: "nichnich", Created: getNow(), Updated: getNow()},
 		}},
-		{"/api/v1/users/2", []byte(`{"firstName": "Nich", "lastName": "Guy", "userName": "nn", "email": "nnn@gmail.com", "password": "nichnich"}`), 200, SuccessResult{
-			"success": User{ID: 2, FirstName: "Nich", LastName: "Guy", UserName: "nn", Email: "nnn@gmail.com", Password: "nichnich", Created: getNow(), Updated: getNow()},
+		{"/api/v1/users/2", []byte(`{"firstName": "Nich", "lastName": "Guy", "userName": "nelly", "email": "nnn@gmail.com", "password": "nichnich"}`), 200, SuccessResult{
+			"success": User{ID: 2, FirstName: "Nich", LastName: "Guy", UserName: "nelly", Email: "nnn@gmail.com", Password: "nichnich", Created: getNow(), Updated: getNow()},
 		}},
 	}
 

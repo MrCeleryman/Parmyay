@@ -74,6 +74,12 @@ func UpdateUser(c *gin.Context) {
 	if newUser.FirstName != "" && newUser.LastName != "" && newUser.UserName != "" &&
 		newUser.Password != "" && newUser.Email != "" {
 		if existingUser.ID != 0 {
+			var checkOtherUser User
+			DB.Where(&User{UserName: newUser.UserName}).First(&checkOtherUser)
+			if checkOtherUser.UserName != "" && checkOtherUser.UserName != existingUser.UserName {
+				c.JSON(422, gin.H{"error": "User already exists"})
+				return
+			}
 			// Ensure naughty fields are not updated
 			newUser.Updated = getNow()
 			newUser.ID = existingUser.ID
@@ -106,11 +112,4 @@ func DeleteUser(c *gin.Context) {
 	} else {
 		c.JSON(404, gin.H{"error": "User #" + id + " not found"})
 	}
-}
-
-// OptionsUser allows DELETE, POST and PUT to come through
-func OptionsUser(c *gin.Context) {
-	c.Writer.Header().Set("Access-Control-Allow-Methods", "PATCH, POST, PUT")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	c.Next()
 }

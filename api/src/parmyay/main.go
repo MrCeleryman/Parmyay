@@ -41,6 +41,10 @@ func IsInt(s string) bool {
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, PATCH")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		c.Writer.Header().Set("Access-Control-Expose-Headers", "Content-Length")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Next()
 	}
 }
@@ -108,8 +112,6 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 		users.GET("/:id", GetUser)
 		users.PUT("/:id", UpdateUser)
 		users.PATCH("/:id", DeleteUser)
-		users.OPTIONS("/", OptionsUser)
-		users.OPTIONS("/:id", OptionsUser)
 	}
 
 	venues := v1.Group("venues")
@@ -119,8 +121,6 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 		venues.GET("/:id", GetVenue)
 		venues.PUT("/:id", UpdateVenue)
 		venues.PATCH("/:id", DeleteVenue)
-		venues.OPTIONS("/", OptionsVenue)
-		venues.OPTIONS("/:id", OptionsVenue)
 	}
 
 	reviews := v1.Group("reviews")
@@ -130,8 +130,6 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 		reviews.GET("/:id", GetReview)
 		reviews.PUT("/:id", UpdateReview)
 		reviews.PATCH("/:id", DeleteReview)
-		reviews.OPTIONS("/", OptionsReview)
-		reviews.OPTIONS("/:id", OptionsReview)
 	}
 
 	achievements := v1.Group("achievements")
@@ -141,8 +139,6 @@ func SetupRouter(release bool, log bool) *gin.Engine {
 		achievements.GET("/:id", GetAchievement)
 		achievements.PUT("/:id", UpdateAchievement)
 		achievements.DELETE("/:id", DeleteAchievement)
-		achievements.OPTIONS("/", OptionsAchievement)
-		achievements.OPTIONS("/:id", OptionsAchievement)
 	}
 	return router
 }
