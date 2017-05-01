@@ -53,3 +53,14 @@ It installs these packages (gocode gopkgs go-outline go-symbols guru gorename go
 - [x] Setup Unit Testing
 - [x] Code Coverage Setup
 - [ ] Code Coverage 100% currently at 98.8% 
+
+
+## Elixir Api
+
+To start your Phoenix app:
+
+  * Install elixir
+  * Install dependencies with `mix deps.get`
+  * Start Phoenix endpoint with `mix phoenix.server`
+
+Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
