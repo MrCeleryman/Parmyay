@@ -57,10 +57,15 @@ It installs these packages (gocode gopkgs go-outline go-symbols guru gorename go
 
 ## Elixir Api
 
-To start your Phoenix app:
+To start the Parmyay API:
 
-  * Install [elixir](http://elixir-lang.org/install.html)
-  * Install dependencies with `mix deps.get`
-  * 
+	* Install [elixir](http://elixir-lang.org/install.html)
+	* Install dependencies with `mix deps.get`
+	* Then run the following in the elixir directory
+	```
+		iex -S mix
+		iex> c "lib/parmyay.ex"
+		iex> {:ok, _} = Plug.Adapters.Cowboy.http MyPlug, []
+	```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.

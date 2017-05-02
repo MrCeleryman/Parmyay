@@ -1,18 +1,15 @@
 defmodule Parmyay do
-  @moduledoc """
-  Documentation for Parmyay.
-  """
+  import Plug.Conn
 
-  @doc """
-  Hello world.
+  def init(options) do
+    # initialize options
 
-  ## Examples
+    options
+  end
 
-      iex> Parmyay.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def call(conn, _opts) do
+    conn
+    |> put_resp_content_type("text/plain")
+    |> send_resp(200, "Hello parmyay!")
   end
 end
