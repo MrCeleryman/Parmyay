@@ -42,6 +42,10 @@ api/bin
 api/pkg
 # All packages which are not parmyay
 api/src/!parmyay
+api/src/github.com/
+api/src/golang.org/
+api/src/gopkg.in/
+api/src/sourcegraph.com/
 api/src/parmyay/coverage
 data.db
 test.db
