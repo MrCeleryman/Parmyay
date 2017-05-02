@@ -48,12 +48,10 @@ test.db
 api/api.exe
 
 # elixir
-elixirApi/_build
-elixirApi/cover
-elixirApi/deps
-elixirApi/doc
-elixirApi/db
-elixirApi/.fetch
+elixir/_build
+elixir/cover
+elixir/deps
+elixir/doc
+elixir/.fetch
 erl_crash.dump
 *.ez
-elixirApi/config/prod.secret.exs

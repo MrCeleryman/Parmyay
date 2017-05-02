@@ -1,5 +1,5 @@
-const spawn = require('child_process').spawn;
-const fs = require('fs');
+const spawn = require(child_process).spawn;
+const fs = require(fs);
 const resolve = require("path").resolve.bind(null, __dirname, "../");
 
 module.exports = {
@@ -21,7 +21,7 @@ module.exports = {
 	},
 	setupStructure: function () {
 		const checkDirs = [
-			resolve('dist'), 
+			resolve(dist), 
 			resolve("api", "pkg"), 
 			resolve("api", "src"), 
 			resolve("api", "bin")
