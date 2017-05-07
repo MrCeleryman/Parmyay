@@ -6,7 +6,7 @@ defmodule Parmyay do
 		port = Application.get_env(:parmyay, :cowboy_port)
 		
 		children = [
-			Plug.Adapters.Cowboy.child_spec(:http, Parmyay.Routers, [], port: port)
+			Plug.Adapters.Cowboy.child_spec(:http, Parmyay.Router, [], port: port)
 		]
 		Logger.info "Started parmyay"
 		Supervisor.start_link(children, strategy: :one_for_one)
