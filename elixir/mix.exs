@@ -17,8 +17,9 @@ defmodule Parmyay.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [
-      applications: [:cowboy, :plug],
-      extra_applications: [:logger]
+      applications: [:cowboy, :logger, :plug],
+      mod: {Parmyay, []},
+	  env: [cowboy_port: 8910]
     ]
   end
 

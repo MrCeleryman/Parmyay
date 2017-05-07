@@ -1,15 +1,15 @@
 defmodule Parmyay do
-  import Plug.Conn
+	use Application
+	require Logger
 
-  def init(options) do
-    # initialize options
+	def start(_type, _args) do
+		port = Application.get_env(:parmyay, :cowboy_port)
+		
+		children = [
+			Plug.Adapters.Cowboy.child_spec(:http, Parmyay.Routers, [], port: port)
+		]
+		Logger.info "Started parmyay"
+		Supervisor.start_link(children, strategy: :one_for_one)
+	end
 
-    options
-  end
-
-  def call(conn, _opts) do
-    conn
-    |> put_resp_content_type("text/plain")
-    |> send_resp(200, "Hello parmyay!")
-  end
 end
