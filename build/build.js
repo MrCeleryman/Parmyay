@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require(fs);
 const resolve = require("path").resolve.bind(null, __dirname, "../");
 const util = require("./index");
 

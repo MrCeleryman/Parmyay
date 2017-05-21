@@ -50,3 +50,12 @@ api/src/parmyay/coverage
 data.db
 test.db
 api/api.exe
+
+# elixir
+elixir/_build
+elixir/cover
+elixir/deps
+elixir/doc
+elixir/.fetch
+erl_crash.dump
+*.ez

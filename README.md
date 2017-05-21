@@ -56,3 +56,19 @@ It installs these packages (gocode gopkgs go-outline go-symbols guru gorename go
 - [x] Setup Unit Testing
 - [x] Code Coverage Setup
 - [ ] Code Coverage 100% currently at 98.8% 
+
+
+## Elixir Api
+
+To start the Parmyay API:
+
+	* Install [elixir](http://elixir-lang.org/install.html)
+	* Install dependencies with `mix deps.get`
+	* Then run the following in the elixir directory
+	```
+		iex -S mix
+		iex> c "lib/parmyay.ex"
+		iex> {:ok, _} = Plug.Adapters.Cowboy.http MyPlug, []
+	```
+
+Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
