@@ -1,0 +1,9 @@
+language: go
+go:
+    - 1.8
+before_install:
+    - nvm install 7.10.0
+install:
+    - node build/build.js
+script:
+    - node build/test.js
