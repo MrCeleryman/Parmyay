@@ -2,9 +2,9 @@
 
 An API dedicated to finding and rating the best chicken parmigianas in your local area
 
-![Build Status](https://travis-ci.org/MrCeleryman/Parmyay.svg?branch=master)](https://travis-ci.org/MrCeleryman/Parmyay)
+[![Build Status](https://travis-ci.org/MrCeleryman/Parmyay.svg?branch=master)](https://travis-ci.org/MrCeleryman/Parmyay)
 
-* [ParmyayWeb](https://github.com/MrCeleryman/ParmyayWeb) ![Build Status](https://travis-ci.org/MrCeleryman/ParmyayWeb.svg?branch=master)](https://travis-ci.org/MrCeleryman/ParmyayWeb)
+* [ParmyayWeb](https://github.com/MrCeleryman/ParmyayWeb) [![Build Status](https://travis-ci.org/MrCeleryman/ParmyayWeb.svg?branch=master)](https://travis-ci.org/MrCeleryman/ParmyayWeb)
 * [ParmyayMobile](https://github.com/MrCeleryman/ParmyayMobile)
 
 ## Stack
