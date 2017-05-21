@@ -1,0 +1,8 @@
+language: go
+go:
+    - 1.8
+node_js:
+    - "7"
+install:
+    - node build\build.js
+    - node build\test.js
