@@ -4,5 +4,5 @@ go:
 node_js:
     - "7"
 install:
-    - node build\build.js
-    - node build\test.js
+    - "node build\build.js"
+    - "node build\test.js"
